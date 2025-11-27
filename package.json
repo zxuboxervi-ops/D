@@ -1,0 +1,16 @@
+{
+  "name": "instagram-mass-report",
+  "version": "1.0.0",
+  "description": "Instagram Mass Report System",
+  "main": "index.html",
+  "scripts": {
+    "build": "echo 'Building Instagram Mass Report System'",
+    "dev": "serve ."
+  },
+  "keywords": ["instagram", "report", "moderation"],
+  "author": "Colin",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.2.0"
+  }
+}
