@@ -1,148 +1,358 @@
-// Instagram Mass Report System
-class InstagramReporter {
+// Real Instagram API System
+class RealInstagramReporter {
     constructor() {
         this.isLoggedIn = false;
         this.isReporting = false;
         this.session = null;
+        this.userId = null;
+        this.targetUser = null;
         this.reportsSent = 0;
         this.successfulReports = 0;
-        this.startTime = null;
-        this.timerInterval = null;
-        this.currentTarget = null;
+        this.apiEndpoint = '/.netlify/functions/instagram-api';
     }
 
-    // Instagram API endpoints (simulated)
-    endpoints = {
-        login: 'https://www.instagram.com/api/v1/accounts/login/',
-        userInfo: 'https://www.instagram.com/api/v1/users/web_profile_info/',
-        report: 'https://www.instagram.com/api/v1/reports/create/'
-    };
-
-    // Login to Instagram
-    async login(username, password) {
+    // Real login with Instagram API
+    async realLogin(username, password, twoFactorCode = null) {
+        this.addLog(`🔐 Attempting real login for: ${username}`);
+        this.updateAction('Logging in...');
+        
         try {
-            this.addLog(`🔐 Attempting login for: ${username}`);
-            
-            // Simulate login process
-            const loginData = {
-                username: username,
-                password: password,
-                queryParams: {}
-            };
+            const response = await fetch(this.apiEndpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    action: 'login',
+                    data: { username, password, twoFactorCode }
+                })
+            });
 
-            // Simulate API call
-            await this.delay(2000);
+            const result = await response.json();
             
-            // Simulate login success (in real implementation, use actual Instagram API)
-            const success = Math.random() > 0.2; // 80% success rate
-            
-            if (success) {
+            if (result.success) {
                 this.isLoggedIn = true;
-                this.session = {
-                    username: username,
-                    token: 'ig_token_' + Date.now(),
-                    loggedInAt: new Date()
-                };
-                this.addLog('✅ Login successful!');
+                this.session = result.session;
+                this.userId = result.userId;
+                this.addLog('✅ Real login successful!');
                 this.updateUI();
-                return true;
+                return { success: true };
+            } else if (result.twoFactorRequired) {
+                this.addLog('📱 2FA required - please enter code');
+                document.getElementById('twoFactorSection').style.display = 'block';
+                return { twoFactorRequired: true };
             } else {
-                this.addLog('❌ Login failed: Invalid credentials or rate limit');
-                return false;
+                this.addLog(`❌ Login failed: ${result.error}`);
+                return { success: false, error: result.error };
             }
-            
         } catch (error) {
             this.addLog(`💥 Login error: ${error.message}`);
-            return false;
+            return { success: false, error: error.message };
         }
     }
 
-    // Verify target account
-    async verifyTarget(username) {
+    // Get target user info
+    async getTargetInfo(username) {
         if (!this.isLoggedIn) {
             this.addLog('❌ Please login first!');
             return false;
         }
 
-        this.addLog(`🔍 Verifying target: @${username}`);
+        this.addLog(`🔍 Getting real info for: @${username}`);
+        this.updateAction('Fetching user info...');
         
         try {
-            // Simulate user verification
-            await this.delay(1500);
+            const response = await fetch(this.apiEndpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    action: 'getUserInfo',
+                    data: { username, session: this.session }
+                })
+            });
+
+            const result = await response.json();
             
-            const userExists = Math.random() > 0.1; // 90% success rate
-            
-            if (userExists) {
-                this.currentTarget = username;
-                this.addLog(`✅ Target verified: @${username} exists`);
-                this.updateUI();
+            if (result.success) {
+                this.targetUser = result.user;
+                this.addLog(`✅ Found user: ${result.user.full_name} (${result.user.followed_by_count} followers)`);
+                this.displayTargetInfo(result.user);
                 return true;
             } else {
-                this.addLog(`❌ Target @${username} not found`);
+                this.addLog(`❌ User not found: ${result.error}`);
                 return false;
             }
         } catch (error) {
-            this.addLog(`💥 Verification error: ${error.message}`);
+            this.addLog(`💥 User info error: ${error.message}`);
             return false;
         }
     }
 
-    // Submit individual report
-    async submitReport(target, reason, method) {
-        if (!this.isLoggedIn || !this.currentTarget) {
+    // Submit real report
+    async submitRealReport(targetUserId, reason, subreason = null) {
+        if (!this.isLoggedIn || !this.targetUser) {
             throw new Error('Not logged in or no target set');
         }
 
-        const reportData = {
-            target_user_id: target,
-            reason: reason,
-            report_type: method,
-            source_name: 'profile',
-            session_id: this.session.token
-        };
-
+        this.updateAction('Submitting report...');
+        
         try {
-            // Simulate API call to Instagram
-            await this.delay(800 + Math.random() * 1200);
+            const response = await fetch(this.apiEndpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    action: 'reportUser',
+                    data: {
+                        targetUserId,
+                        reason,
+                        subreason,
+                        session: this.session
+                    }
+                })
+            });
+
+            const result = await response.json();
             
-            // Simulate different outcomes
-            const successRate = this.getSuccessRate(method);
-            const isSuccess = Math.random() < successRate;
-            
-            if (isSuccess) {
+            if (result.success && result.reported) {
                 this.successfulReports++;
-                return { success: true, message: 'Report submitted successfully' };
+                return { success: true, message: 'Report submitted to Instagram' };
             } else {
-                return { success: false, message: 'Report rejected by system' };
+                return { success: false, message: result.error || 'Report failed' };
             }
         } catch (error) {
-            return { success: false, message: `Network error: ${error.message}` };
+            return { success: false, message: `API error: ${error.message}` };
         }
     }
 
-    // Get success rate based on report method
-    getSuccessRate(method) {
-        const rates = {
-            'spam': 0.7,
-            'fake': 0.8,
-            'harassment': 0.6,
-            'nudity': 0.9,
-            'hate_speech': 0.85,
-            'violence': 0.9,
-            'intellectual': 0.5,
-            'suicide': 0.95,
-            'terrorism': 0.98,
-            'scam': 0.75
-        };
-        return rates[method] || 0.7;
-    }
-
-    // Start mass reporting
-    async startMassReport(target, method, count, delay, intensity) {
+    // Start real mass reporting
+    async startRealMassReport() {
         if (this.isReporting) return;
         
+        const targetUserId = this.targetUser?.id;
+        const reason = document.getElementById('reportCategory').value;
+        const subreason = document.getElementById('reportSubcategory').value;
+        const count = parseInt(document.getElementById('reportCount').value);
+        const useProxy = document.getElementById('useProxy').checked;
+
+        if (!targetUserId) {
+            this.addLog('❌ Please select a target first!');
+            return;
+        }
+
         this.isReporting = true;
         this.reportsSent = 0;
+        this.successfulReports = 0;
+        
+        this.addLog(`🚀 Starting REAL mass report on user ID: ${targetUserId}`);
+        this.addLog(`📊 Target: ${count} reports | Reason: ${reason}`);
+
+        for (let i = 0; i < count && this.isReporting; i++) {
+            this.reportsSent++;
+            
+            try {
+                // Random delay to avoid detection (3-8 seconds)
+                const delay = 3000 + Math.random() * 5000;
+                await this.delay(delay);
+                
+                const result = await this.submitRealReport(targetUserId, reason, subreason);
+                
+                if (result.success) {
+                    this.addLog(`✅ Report ${i+1}/${count}: ${result.message}`);
+                } else {
+                    this.addLog(`❌ Report ${i+1}/${count}: ${result.message}`);
+                }
+            } catch (error) {
+                this.addLog(`💥 Report ${i+1}/${count} failed: ${error.message}`);
+            }
+            
+            this.updateStats();
+            
+            // Update progress
+            this.updateAction(`Reporting... ${i+1}/${count}`);
+        }
+        
+        this.stopReporting();
+        const successRate = ((this.successfulReports / this.reportsSent) * 100).toFixed(1);
+        this.addLog(`🎯 Real reporting completed! Success rate: ${successRate}%`);
+    }
+
+    // Display target information
+    displayTargetInfo(user) {
+        const targetInfo = document.getElementById('targetInfo');
+        targetInfo.innerHTML = `
+            <div class="user-card">
+                <strong>${user.full_name || user.username}</strong>
+                <div>@${user.username}</div>
+                <div>👥 ${user.followed_by_count?.toLocaleString()} followers</div>
+                <div>📸 ${user.edge_owner_to_timeline_media?.count || 0} posts</div>
+                <div>🆔 User ID: ${user.id}</div>
+                <div>${user.is_private ? '🔒 Private Account' : '🔓 Public Account'}</div>
+            </div>
+        `;
+        
+        document.getElementById('targetUserId').textContent = user.id;
+    }
+
+    // Update subcategories based on category
+    updateSubcategories() {
+        const category = document.getElementById('reportCategory').value;
+        const subcategorySelect = document.getElementById('reportSubcategory');
+        
+        const subcategories = this.getSubcategories(category);
+        subcategorySelect.innerHTML = subcategories.map(sub => 
+            `<option value="${sub.value}">${sub.text}</option>`
+        ).join('');
+    }
+
+    getSubcategories(category) {
+        const subcategories = {
+            '1': [ // Spam
+                { value: '1', text: 'Spam' },
+                { value: '2', text: 'Fake Engagement' },
+                { value: '3', text: 'Misleading Information' }
+            ],
+            '2': [ // Nudity
+                { value: '1', text: 'Nudity' },
+                { value: '2', text: 'Sexual Activity' },
+                { value: '3', text: 'Sexual Solicitation' }
+            ],
+            // Add more subcategories for other report types...
+        };
+        
+        return subcategories[category] || [{ value: '1', text: 'General' }];
+    }
+
+    // Utility methods
+    delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    addLog(message) {
+        const logContainer = document.getElementById('logContainer');
+        const logEntry = document.createElement('div');
+        logEntry.className = 'log-entry';
+        logEntry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+        logContainer.appendChild(logEntry);
+        logContainer.scrollTop = logContainer.scrollHeight;
+    }
+
+    updateAction(action) {
+        document.getElementById('currentAction').textContent = action;
+    }
+
+    updateStats() {
+        document.getElementById('reportsSent').textContent = this.reportsSent;
+        
+        const successRate = this.reportsSent > 0 ? 
+            ((this.successfulReports / this.reportsSent) * 100).toFixed(1) + '%' : '0%';
+        document.getElementById('apiSuccess').textContent = successRate;
+    }
+
+    updateUI() {
+        document.getElementById('loginStatusText').textContent = this.isLoggedIn ? 
+            `Logged in (User ID: ${this.userId})` : 'Not Logged In';
+        
+        document.getElementById('targetSection').style.display = this.isLoggedIn ? 'block' : 'none';
+        document.getElementById('reportSection').style.display = this.isLoggedIn ? 'block' : 'none';
+        document.getElementById('controlSection').style.display = this.isLoggedIn ? 'block' : 'none';
+        
+        document.getElementById('startBtn').disabled = !this.isLoggedIn || !this.targetUser || this.isReporting;
+    }
+
+    stopReporting() {
+        this.isReporting = false;
+        this.updateAction('Idle');
+        this.addLog('🛑 Reporting stopped');
+    }
+
+    logout() {
+        this.isLoggedIn = false;
+        this.session = null;
+        this.targetUser = null;
+        this.reportsSent = 0;
+        this.successfulReports = 0;
+        
+        document.getElementById('twoFactorSection').style.display = 'none';
+        document.getElementById('targetInfo').innerHTML = '';
+        
+        this.addLog('🚪 Logged out successfully');
+        this.updateUI();
+        this.updateStats();
+    }
+}
+
+// Global instance
+const realInstagram = new RealInstagramReporter();
+
+// UI Event Handlers
+async function realLogin() {
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    
+    if (!username || !password) {
+        realInstagram.addLog('❌ Please enter both username and password');
+        return;
+    }
+    
+    const result = await realInstagram.realLogin(username, password);
+    
+    if (result.success) {
+        document.getElementById('loginStatus').textContent = '✅ Login successful!';
+    }
+}
+
+async function submitTwoFactor() {
+    const code = document.getElementById('twoFactorCode').value;
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    
+    if (!code) {
+        realInstagram.addLog('❌ Please enter 2FA code');
+        return;
+    }
+    
+    const result = await realInstagram.realLogin(username, password, code);
+    
+    if (result.success) {
+        document.getElementById('twoFactorSection').style.display = 'none';
+        document.getElementById('loginStatus').textContent = '✅ Login with 2FA successful!';
+    }
+}
+
+function getTargetInfo() {
+    const target = document.getElementById('targetUsername').value;
+    
+    if (!target) {
+        realInstagram.addLog('❌ Please enter target username');
+        return;
+    }
+    
+    realInstagram.getTargetInfo(target);
+}
+
+function startRealReporting() {
+    realInstagram.startRealMassReport();
+}
+
+function stopReporting() {
+    realInstagram.stopReporting();
+}
+
+function logout() {
+    realInstagram.logout();
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('reportCategory').addEventListener('change', function() {
+        realInstagram.updateSubcategories();
+    });
+    realInstagram.updateSubcategories();
+});        this.reportsSent = 0;
         this.successfulReports = 0;
         this.startTime = Date.now();
         
