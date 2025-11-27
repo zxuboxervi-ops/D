@@ -3,25 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Instagram Mass Report</title>
+    <title>Instagram Mass Report - Real API</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>🚨 INSTAGRAM MASS REPORT SYSTEM</h1>
-            <p>Advanced reporting tool for content moderation</p>
+            <h1>🚨 INSTAGRAM MASS REPORT - REAL API</h1>
+            <p>Using Instagram Private API for real reporting</p>
         </header>
 
         <!-- Login Section -->
         <section id="loginSection" class="section">
-            <h2>🔐 Login Instagram</h2>
+            <h2>🔐 Real Instagram Login</h2>
             <div class="form-group">
                 <input type="text" id="username" placeholder="Instagram Username" required>
                 <input type="password" id="password" placeholder="Instagram Password" required>
-                <button onclick="login()" id="loginBtn">🔓 LOGIN</button>
+                <button onclick="realLogin()" id="loginBtn">🔓 REAL LOGIN</button>
             </div>
             <div id="loginStatus"></div>
+            <div id="twoFactorSection" style="display: none;">
+                <input type="text" id="twoFactorCode" placeholder="2FA Code (if enabled)">
+                <button onclick="submitTwoFactor()">✅ Verify 2FA</button>
+            </div>
         </section>
 
         <!-- Target Section -->
@@ -29,9 +33,9 @@
             <h2>🎯 Target Account</h2>
             <div class="form-group">
                 <input type="text" id="targetUsername" placeholder="Target Instagram Username" required>
-                <button onclick="verifyTarget()">🔍 Verify Target</button>
+                <button onclick="getTargetInfo()">🔍 Get Target Info</button>
             </div>
-            <div id="targetInfo"></div>
+            <div id="targetInfo" class="target-info"></div>
         </section>
 
         <!-- Report Settings -->
@@ -39,39 +43,36 @@
             <h2>⚡ Report Configuration</h2>
             
             <div class="form-group">
-                <label>Report Method:</label>
-                <select id="reportMethod">
-                    <option value="spam">🚫 Spam</option>
-                    <option value="fake">👤 Fake Account</option>
-                    <option value="harassment">⚖️ Harassment</option>
-                    <option value="nudity">🔞 Nudity</option>
-                    <option value="hate_speech">💀 Hate Speech</option>
-                    <option value="violence">🔪 Violence</option>
-                    <option value="intellectual">📝 Intellectual Property</option>
-                    <option value="suicide">🚑 Suicide/Self-harm</option>
-                    <option value="terrorism">💣 Terrorism</option>
-                    <option value="scam">💸 Scam/Fraud</option>
+                <label>Report Category:</label>
+                <select id="reportCategory">
+                    <option value="1">Spam</option>
+                    <option value="2">Nudity or Sexual Activity</option>
+                    <option value="3">Hate Speech or Symbols</option>
+                    <option value="4">Violence or Dangerous Organizations</option>
+                    <option value="5">Bullying or Harassment</option>
+                    <option value="6">Intellectual Property Violation</option>
+                    <option value="7">Suicide or Self-Injury</option>
+                    <option value="8">Scam or Fraud</option>
+                    <option value="9">Sale of Illegal or Regulated Goods</option>
+                    <option value="10">False Information</option>
                 </select>
             </div>
 
             <div class="form-group">
-                <label>Report Intensity:</label>
-                <select id="reportIntensity">
-                    <option value="low">🐢 Low (Safe)</option>
-                    <option value="medium">🚶 Medium (Balanced)</option>
-                    <option value="high">🚀 High (Aggressive)</option>
-                    <option value="extreme">💀 Extreme (Maximum)</option>
+                <label>Report Subcategory:</label>
+                <select id="reportSubcategory">
+                    <!-- Will be populated based on category -->
                 </select>
             </div>
 
             <div class="form-group">
                 <label>Number of Reports:</label>
-                <input type="number" id="reportCount" value="50" min="1" max="1000">
+                <input type="number" id="reportCount" value="10" min="1" max="100">
             </div>
 
             <div class="form-group">
-                <label>Delay Between Reports (seconds):</label>
-                <input type="number" id="reportDelay" value="3" min="1" max="10">
+                <label>Use Proxy Rotation:</label>
+                <input type="checkbox" id="useProxy" checked>
             </div>
         </section>
 
@@ -79,49 +80,49 @@
         <section id="controlSection" class="section" style="display: none;">
             <h2>🎮 Control Panel</h2>
             <div class="button-group">
-                <button onclick="startMassReport()" id="startBtn">🚀 START MASS REPORT</button>
-                <button onclick="stopReport()" id="stopBtn" class="stop">🛑 STOP</button>
-                <button onclick="resetSystem()" id="resetBtn" class="reset">🔄 RESET</button>
+                <button onclick="startRealReporting()" id="startBtn">🚀 START REAL REPORTING</button>
+                <button onclick="stopReporting()" id="stopBtn" class="stop">🛑 STOP</button>
+                <button onclick="logout()" id="logoutBtn" class="reset">🚪 LOGOUT</button>
             </div>
         </section>
 
         <!-- Status Section -->
         <section id="statusSection" class="section">
-            <h2>📊 System Status</h2>
+            <h2>📊 Real-Time Status</h2>
             <div class="status-grid">
                 <div class="status-item">
                     <span>Login Status:</span>
                     <span id="loginStatusText">Not Logged In</span>
                 </div>
                 <div class="status-item">
-                    <span>Target Status:</span>
-                    <span id="targetStatusText">Not Set</span>
+                    <span>Target User ID:</span>
+                    <span id="targetUserId">-</span>
                 </div>
                 <div class="status-item">
                     <span>Reports Sent:</span>
                     <span id="reportsSent">0</span>
                 </div>
                 <div class="status-item">
-                    <span>Success Rate:</span>
-                    <span id="successRate">0%</span>
+                    <span>API Success:</span>
+                    <span id="apiSuccess">0%</span>
                 </div>
                 <div class="status-item">
-                    <span>Ban Probability:</span>
-                    <span id="banProbability">0%</span>
+                    <span>Current Action:</span>
+                    <span id="currentAction">Idle</span>
                 </div>
                 <div class="status-item">
-                    <span>Time Running:</span>
-                    <span id="timeRunning">0s</span>
+                    <span>Session Age:</span>
+                    <span id="sessionAge">0s</span>
                 </div>
             </div>
         </section>
 
         <!-- Results Log -->
         <section id="logSection" class="section">
-            <h2>📝 Activity Log</h2>
+            <h2>📝 Real API Log</h2>
             <div class="log-container" id="logContainer">
-                <div class="log-entry">[SYSTEM] Instagram Mass Report System Ready</div>
-                <div class="log-entry">[INFO] Please login to start reporting</div>
+                <div class="log-entry">[SYSTEM] Instagram Real API System Ready</div>
+                <div class="log-entry">[INFO] Uses official Instagram endpoints</div>
             </div>
         </section>
     </div>
