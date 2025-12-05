@@ -3,105 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DeepSeek AI Chat</title>
+    <title>DeepSeek AI Chat - Custom Tone</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <div class="container">
-        <div class="sidebar">
-            <div class="logo">
-                <h2><i class="fas fa-robot"></i> DeepSeek AI</h2>
-                <p>Powered by Colin's Script</p>
-            </div>
-            <div class="new-chat">
-                <button id="newChatBtn"><i class="fas fa-plus"></i> New Chat</button>
-            </div>
-            <div class="chat-history" id="chatHistory">
-                <!-- Chat history will appear here -->
-            </div>
-            <div class="settings">
-                <button id="apiConfigBtn"><i class="fas fa-key"></i> API Config</button>
-                <button id="clearHistoryBtn"><i class="fas fa-trash"></i> Clear All</button>
-            </div>
+        <h1>DeepSeek AI Chat</h1>
+        <div class="settings">
+            <label for="apiKey">API Key:</label>
+            <input type="password" id="apiKey" placeholder="Enter your DeepSeek API key">
+            <label for="tone">AI Tone:</label>
+            <select id="tone">
+                <option value="normal">Normal</option>
+                <option value="kasar">Kasar/Galak</option>
+                <option value="santai">Santai Gaul</option>
+            </select>
+            <button onclick="saveSettings()">Save Settings</button>
         </div>
-        
-        <div class="main-content">
-            <div class="header">
-                <h1><i class="fas fa-comment-dots"></i> AI Assistant</h1>
-                <div class="status">
-                    <span class="status-indicator active"></span>
-                    <span id="statusText">Connected</span>
-                </div>
-            </div>
-            
-            <div class="chat-container" id="chatContainer">
-                <div class="welcome-message">
-                    <h3><i class="fas fa-rocket"></i> Welcome to DeepSeek AI</h3>
-                    <p>Ask me anything. I can help with coding, analysis, creative writing, and more.</p>
-                    <div class="quick-prompts">
-                        <button class="quick-prompt" data-prompt="Write Python code to calculate fibonacci sequence">Fibonacci Code</button>
-                        <button class="quick-prompt" data-prompt="Explain quantum computing in simple terms">Quantum Computing</button>
-                        <button class="quick-prompt" data-prompt="Write a poem about technology">Write a Poem</button>
-                        <button class="quick-prompt" data-prompt="Plan a 3-day survival strategy in wilderness">Survival Strategy</button>
-                    </div>
-                </div>
-            </div>
-            
+        <div class="chat-container">
+            <div id="chatBox"></div>
             <div class="input-area">
-                <div class="input-container">
-                    <textarea id="userInput" placeholder="Type your message here... (Shift+Enter for new line, Enter to send)" rows="1"></textarea>
-                    <button id="sendBtn"><i class="fas fa-paper-plane"></i> Send</button>
-                </div>
-                <div class="input-footer">
-                    <div class="model-info">
-                        <span><i class="fas fa-microchip"></i> DeepSeek-Latest</span>
-                    </div>
-                    <div class="disclaimer">
-                        <span><i class="fas fa-exclamation-triangle"></i> AI can make mistakes. Verify important info.</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- API Config Modal -->
-        <div class="modal" id="apiModal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3><i class="fas fa-cog"></i> API Configuration</h3>
-                    <button class="close-btn">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="apiKey"><i class="fas fa-key"></i> DeepSeek API Key</label>
-                        <input type="password" id="apiKey" placeholder="Enter your API key">
-                        <p class="help-text">Get your API key from <a href="https://platform.deepseek.com/api_keys" target="_blank">DeepSeek Platform</a></p>
-                    </div>
-                    <div class="form-group">
-                        <label for="model"><i class="fas fa-brain"></i> Model</label>
-                        <select id="model">
-                            <option value="deepseek-chat">deepseek-chat</option>
-                            <option value="deepseek-coder">deepseek-coder</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="maxTokens"><i class="fas fa-ruler"></i> Max Tokens</label>
-                        <input type="number" id="maxTokens" value="2048" min="100" max="4096">
-                    </div>
-                    <div class="form-group">
-                        <label><i class="fas fa-sliders-h"></i> Temperature</label>
-                        <input type="range" id="temperature" min="0" max="2" step="0.1" value="0.7">
-                        <span id="tempValue">0.7</span>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button id="testApiBtn" class="secondary-btn"><i class="fas fa-vial"></i> Test Connection</button>
-                    <button id="saveApiBtn" class="primary-btn"><i class="fas fa-save"></i> Save Settings</button>
-                </div>
+                <input type="text" id="userInput" placeholder="Ketik pesan ke AI...">
+                <button onclick="sendMessage()">Kirim</button>
+                <button onclick="clearChat()">Hapus Chat</button>
             </div>
         </div>
     </div>
-    
     <script src="script.js"></script>
 </body>
-                            </html>
+</html>
