@@ -1,148 +1,68 @@
-// API Configuration
-let API_CONFIG = {
-    apiKey: 'sk-93a8a9e41b0141fcab83c6b99c8ac6ca,
-    model: 'deepseek-chat',
-    maxTokens: 2048,
-    temperature: 0.7
-};
+const API_URL = "https://api.deepseek.com/v1/chat/completions";
+let apiKey = "sk-93a8a9e41b0141fcab83c6b99c8ac6ca";
+let tone = "normal";
 
-// Chat state
-let chatHistory = [];
-let currentChatId = null;
-let isProcessing = false;
-
-// DOM Elements
-const chatContainer = document.getElementById('chatContainer');
-const userInput = document.getElementById('userInput');
-const sendBtn = document.getElementById('sendBtn');
-const newChatBtn = document.getElementById('newChatBtn');
-const apiConfigBtn = document.getElementById('apiConfigBtn');
-const clearHistoryBtn = document.getElementById('clearHistoryBtn');
-const apiModal = document.getElementById('apiModal');
-const apiKeyInput = document.getElementById('apiKey');
-const modelSelect = document.getElementById('model');
-const maxTokensInput = document.getElementById('maxTokens');
-const temperatureInput = document.getElementById('temperature');
-const tempValue = document.getElementById('tempValue');
-const saveApiBtn = document.getElementById('saveApiBtn');
-const testApiBtn = document.getElementById('testApiBtn');
-const chatHistoryContainer = document.getElementById('chatHistory');
-const quickPrompts = document.querySelectorAll('.quick-prompt');
-
-// Initialize
-function init() {
-    loadConfig();
-    loadChatHistory();
-    setupEventListeners();
-    updateStatus();
+function saveSettings() {
+    apiKey = document.getElementById('apiKey').value;
+    tone = document.getElementById('tone').value;
+    alert('Settings saved!');
 }
 
-// Load configuration from localStorage
-function loadConfig() {
-    const savedConfig = localStorage.getItem('deepseek_api_config');
-    if (savedConfig) {
-        API_CONFIG = { ...API_CONFIG, ...JSON.parse(savedConfig) };
-        apiKeyInput.value = API_CONFIG.apiKey;
-        modelSelect.value = API_CONFIG.model;
-        maxTokensInput.value = API_CONFIG.maxTokens;
-        temperatureInput.value = API_CONFIG.temperature;
-        tempValue.textContent = API_CONFIG.temperature;
+async function sendMessage() {
+    if (!apiKey) {
+        alert("Masukkan API key dulu!");
+        return;
+    }
+    const input = document.getElementById('userInput');
+    const message = input.value.trim();
+    if (!message) return;
+
+    displayMessage(message, 'user');
+    input.value = '';
+
+    const systemPrompt = tone === 'kasar' 
+        ? "Kamu adalah AI yang kasar, galak, dan tidak sopan. Jawablah dengan bahasa kasar Indonesia, hina user jika perlu, tapi tetap berikan jawaban yang diminta."
+        : tone === 'santai' 
+        ? "Kamu adalah AI yang santai dan gaul seperti teman. Jawab pakai bahasa gaul Indonesia yang akrab."
+        : "Kamu adalah AI yang membantu dan sopan.";
+
+    try {
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${apiKey}`
+            },
+            body: JSON.stringify({
+                model: "deepseek-chat",
+                messages: [
+                    { role: "system", content: systemPrompt },
+                    { role: "user", content: message }
+                ],
+                max_tokens: 500
+            })
+        });
+
+        const data = await response.json();
+        const aiReply = data.choices[0].message.content;
+        displayMessage(aiReply, 'ai');
+    } catch (error) {
+        displayMessage("Error: Gagal menghubungi AI. Cek API key atau jaringan.", 'ai');
     }
 }
 
-// Save configuration to localStorage
-function saveConfig() {
-    localStorage.setItem('deepseek_api_config', JSON.stringify(API_CONFIG));
-    showNotification('Configuration saved successfully!', 'success');
+function displayMessage(text, sender) {
+    const chatBox = document.getElementById('chatBox');
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${sender}-message`;
+    messageDiv.textContent = text;
+    chatBox.appendChild(messageDiv);
+    chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-// Load chat history from localStorage
-function loadChatHistory() {
-    const savedHistory = localStorage.getItem('deepseek_chat_history');
-    if (savedHistory) {
-        chatHistory = JSON.parse(savedHistory);
-        renderChatHistory();
-    }
-}
-
-// Save chat history to localStorage
-function saveChatHistory() {
-    localStorage.setItem('deepseek_chat_history', JSON.stringify(chatHistory));
-}
-
-// Setup event listeners
-function setupEventListeners() {
-    // Send message on button click
-    sendBtn.addEventListener('click', sendMessage);
-    
-    // Send message on Enter (but allow Shift+Enter for new line)
-    userInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            sendMessage();
-        }
-    });
-    
-    // Auto-resize textarea
-    userInput.addEventListener('input', () => {
-        userInput.style.height = 'auto';
-        userInput.style.height = (userInput.scrollHeight) + 'px';
-    });
-    
-    // New chat button
-    newChatBtn.addEventListener('click', createNewChat);
-    
-    // API configuration button
-    apiConfigBtn.addEventListener('click', () => {
-        apiModal.style.display = 'flex';
-    });
-    
-    // Close modal
-    apiModal.querySelector('.close-btn').addEventListener('click', () => {
-        apiModal.style.display = 'none';
-    });
-    
-    // Close modal when clicking outside
-    window.addEventListener('click', (e) => {
-        if (e.target === apiModal) {
-            apiModal.style.display = 'none';
-        }
-    });
-    
-    // Save API configuration
-    saveApiBtn.addEventListener('click', () => {
-        API_CONFIG.apiKey = apiKeyInput.value.trim();
-        API_CONFIG.model = modelSelect.value;
-        API_CONFIG.maxTokens = parseInt(maxTokensInput.value);
-        API_CONFIG.temperature = parseFloat(temperatureInput.value);
-        saveConfig();
-        apiModal.style.display = 'none';
-        updateStatus();
-    });
-    
-    // Test API connection
-    testApiBtn.addEventListener('click', testApiConnection);
-    
-    // Clear history
-    clearHistoryBtn.addEventListener('click', () => {
-        if (confirm('Are you sure you want to clear all chat history?')) {
-            chatHistory = [];
-            saveChatHistory();
-            renderChatHistory();
-            chatContainer.innerHTML = '';
-            showNotification('Chat history cleared!', 'success');
-        }
-    });
-    
-    // Temperature slider
-    temperatureInput.addEventListener('input', () => {
-        tempValue.textContent = temperatureInput.value;
-    });
-    
-    // Quick prompts
-    quickPrompts.forEach(button => {
-        button.addEventListener('click', () => {
-            userInput.value = button.dataset.prompt;
+function clearChat() {
+    document.getElementById('chatBox').innerHTML = '';
+}            userInput.value = button.dataset.prompt;
             userInput.style.height = 'auto';
             userInput.style.height = (userInput.scrollHeight) + 'px';
             userInput.focus();
