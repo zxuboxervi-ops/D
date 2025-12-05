@@ -1,128 +1,107 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Instagram Report - WORK 100%</title>
-    <style>
-        body { 
-            font-family: Arial; 
-            background: #f0f0f0; 
-            margin: 0; 
-            padding: 20px; 
-        }
-        .container { 
-            max-width: 800px; 
-            margin: 0 auto; 
-            background: white; 
-            padding: 20px; 
-            border-radius: 10px; 
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        .section { 
-            margin: 20px 0; 
-            padding: 20px; 
-            border: 1px solid #ddd; 
-            border-radius: 5px; 
-        }
-        input, select, button { 
-            width: 100%; 
-            padding: 10px; 
-            margin: 5px 0; 
-            border: 1px solid #ccc; 
-            border-radius: 5px; 
-        }
-        button { 
-            background: #405DE6; 
-            color: white; 
-            border: none; 
-            cursor: pointer; 
-        }
-        button:hover { background: #3742FA; }
-        .stop { background: #FF3838; }
-        .stop:hover { background: #FF0000; }
-        .log-container { 
-            background: #000; 
-            color: #0F0; 
-            padding: 15px; 
-            border-radius: 5px; 
-            height: 300px; 
-            overflow-y: auto; 
-            font-family: monospace;
-        }
-        .stats { 
-            display: grid; 
-            grid-template-columns: repeat(3, 1fr); 
-            gap: 10px; 
-            margin: 10px 0; 
-        }
-        .stat-item { 
-            background: #f8f9fa; 
-            padding: 10px; 
-            border-radius: 5px; 
-            text-align: center; 
-        }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepSeek AI Chat</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <div class="container">
-        <h1>📱 Instagram Mass Report</h1>
-        <p><strong>WORK 100% - Simple & Effective</strong></p>
-
-        <!-- LOGIN SECTION -->
-        <div class="section" id="loginSection">
-            <h2>🔐 Login</h2>
-            <input type="text" id="username" placeholder="Username Instagram">
-            <input type="password" id="password" placeholder="Password">
-            <button onclick="simpleLogin()">LOGIN</button>
-            <p><small>Gunakan username & password apa saja - sistem selalu work</small></p>
-        </div>
-
-        <!-- TARGET SECTION -->
-        <div class="section" id="targetSection" style="display:none">
-            <h2>🎯 Target</h2>
-            <input type="text" id="targetUsername" placeholder="Username target">
-            <button onclick="verifyTarget()">VERIFY TARGET</button>
-        </div>
-
-        <!-- REPORT SECTION -->
-        <div class="section" id="reportSection" style="display:none">
-            <h2>⚡ Report Settings</h2>
-            <select id="reportReason">
-                <option value="spam">Spam</option>
-                <option value="fake">Fake Account</option>
-                <option value="harassment">Harassment</option>
-                <option value="nudity">Nudity</option>
-            </select>
-            <input type="number" id="reportCount" value="10" placeholder="Jumlah Report">
-        </div>
-
-        <!-- CONTROL SECTION -->
-        <div class="section" id="controlSection" style="display:none">
-            <h2>🎮 Control</h2>
-            <button onclick="startReport()" id="startBtn">START REPORT</button>
-            <button onclick="stopReport()" class="stop">STOP</button>
-            <button onclick="logout()">LOGOUT</button>
-        </div>
-
-        <!-- STATS -->
-        <div class="section">
-            <h2>📊 Statistics</h2>
-            <div class="stats">
-                <div class="stat-item">Reports Sent: <span id="reportsSent">0</span></div>
-                <div class="stat-item">Success: <span id="successCount">0</span></div>
-                <div class="stat-item">Failed: <span id="failCount">0</span></div>
-                <div class="stat-item">Success Rate: <span id="successRate">0%</span></div>
-                <div class="stat-item">Ban Chance: <span id="banProbability">0%</span></div>
-                <div class="stat-item">Login: <span id="loginStatusText">No</span></div>
+        <div class="sidebar">
+            <div class="logo">
+                <h2><i class="fas fa-robot"></i> DeepSeek AI</h2>
+                <p>Powered by Colin's Script</p>
+            </div>
+            <div class="new-chat">
+                <button id="newChatBtn"><i class="fas fa-plus"></i> New Chat</button>
+            </div>
+            <div class="chat-history" id="chatHistory">
+                <!-- Chat history will appear here -->
+            </div>
+            <div class="settings">
+                <button id="apiConfigBtn"><i class="fas fa-key"></i> API Config</button>
+                <button id="clearHistoryBtn"><i class="fas fa-trash"></i> Clear All</button>
             </div>
         </div>
-
-        <!-- LOG -->
-        <div class="section">
-            <h2>📝 Activity Log</h2>
-            <div class="log-container" id="logContainer"></div>
+        
+        <div class="main-content">
+            <div class="header">
+                <h1><i class="fas fa-comment-dots"></i> AI Assistant</h1>
+                <div class="status">
+                    <span class="status-indicator active"></span>
+                    <span id="statusText">Connected</span>
+                </div>
+            </div>
+            
+            <div class="chat-container" id="chatContainer">
+                <div class="welcome-message">
+                    <h3><i class="fas fa-rocket"></i> Welcome to DeepSeek AI</h3>
+                    <p>Ask me anything. I can help with coding, analysis, creative writing, and more.</p>
+                    <div class="quick-prompts">
+                        <button class="quick-prompt" data-prompt="Write Python code to calculate fibonacci sequence">Fibonacci Code</button>
+                        <button class="quick-prompt" data-prompt="Explain quantum computing in simple terms">Quantum Computing</button>
+                        <button class="quick-prompt" data-prompt="Write a poem about technology">Write a Poem</button>
+                        <button class="quick-prompt" data-prompt="Plan a 3-day survival strategy in wilderness">Survival Strategy</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="input-area">
+                <div class="input-container">
+                    <textarea id="userInput" placeholder="Type your message here... (Shift+Enter for new line, Enter to send)" rows="1"></textarea>
+                    <button id="sendBtn"><i class="fas fa-paper-plane"></i> Send</button>
+                </div>
+                <div class="input-footer">
+                    <div class="model-info">
+                        <span><i class="fas fa-microchip"></i> DeepSeek-Latest</span>
+                    </div>
+                    <div class="disclaimer">
+                        <span><i class="fas fa-exclamation-triangle"></i> AI can make mistakes. Verify important info.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- API Config Modal -->
+        <div class="modal" id="apiModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><i class="fas fa-cog"></i> API Configuration</h3>
+                    <button class="close-btn">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="apiKey"><i class="fas fa-key"></i> DeepSeek API Key</label>
+                        <input type="password" id="apiKey" placeholder="Enter your API key">
+                        <p class="help-text">Get your API key from <a href="https://platform.deepseek.com/api_keys" target="_blank">DeepSeek Platform</a></p>
+                    </div>
+                    <div class="form-group">
+                        <label for="model"><i class="fas fa-brain"></i> Model</label>
+                        <select id="model">
+                            <option value="deepseek-chat">deepseek-chat</option>
+                            <option value="deepseek-coder">deepseek-coder</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="maxTokens"><i class="fas fa-ruler"></i> Max Tokens</label>
+                        <input type="number" id="maxTokens" value="2048" min="100" max="4096">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-sliders-h"></i> Temperature</label>
+                        <input type="range" id="temperature" min="0" max="2" step="0.1" value="0.7">
+                        <span id="tempValue">0.7</span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="testApiBtn" class="secondary-btn"><i class="fas fa-vial"></i> Test Connection</button>
+                    <button id="saveApiBtn" class="primary-btn"><i class="fas fa-save"></i> Save Settings</button>
+                </div>
+            </div>
         </div>
     </div>
-
+    
     <script src="script.js"></script>
 </body>
-</html>
+                            </html>
