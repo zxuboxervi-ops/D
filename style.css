@@ -4,6 +4,6 @@ h1.glow{font-size:60px;text-shadow:0 0 5px #ff0040,0 0 10px #ff0040,0 0 20px #ff
 p.sub{color:#aaa;margin-bottom:30px;font-size:18px}
 input,button{width:300px;padding:12px;margin:8px;border:none;font-size:20px}
 input{background:#222;color:#fff}
-button{background:#ff0040;color:#000;font-weight:bold;cursor:pointer;transition:.2s}
+button{background:#ff0040;color:#000;font-weight:bold;cursor:pointer}
 button:hover{background:#fff;color:#ff0040;box-shadow:0 0 20px #ff0040}
 pre{text-align:left;width:320px;margin:20px auto;height:200px;overflow-y:auto;background:#222;padding:10px;border-left:3px solid #ff0040}
