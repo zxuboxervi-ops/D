@@ -1,11 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
-body{background:#111;color:#ff2a00;font-family:'Bebas Neue',cursive;text-align:center;height:100vh;margin:0;display:flex;align-items:center;justify-content:center}
-#loginBox,#panel{width:90%;max-width:400px}
-h1.glow{font-size:60px;text-shadow:0 0 5px #ff2a00,0 0 10px #ff2a00,0 0 20px #ff2a00}
+body{background:#111;color:#ff0040;font-family:'Bebas Neue',cursive;text-align:center;padding-top:10vh}
+h1.glow{font-size:60px;text-shadow:0 0 5px #ff0040,0 0 10px #ff0040,0 0 20px #ff0040}
 p.sub{color:#aaa;margin-bottom:30px;font-size:18px}
-input,button{width:100%;padding:12px;margin:8px 0;border:none;font-size:18px}
+input,button{width:300px;padding:12px;margin:8px;border:none;font-size:20px}
 input{background:#222;color:#fff}
-button{background:#ff2a00;color:#000;font-weight:bold;cursor:pointer;transition:.2s}
-button:hover{background:#fff;color:#ff2a00;box-shadow:0 0 20px #ff2a00}
-.sambutan{font-size:16px;color:#888;margin-bottom:20px}
-pre{text-align:left;height:250px;overflow-y:auto;background:#222;padding:10px;border-left:3px solid #ff2a00}
+button{background:#ff0040;color:#000;font-weight:bold;cursor:pointer;transition:.2s}
+button:hover{background:#fff;color:#ff0040;box-shadow:0 0 20px #ff0040}
+pre{text-align:left;width:320px;margin:20px auto;height:200px;overflow-y:auto;background:#222;padding:10px;border-left:3px solid #ff0040}
